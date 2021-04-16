@@ -1,0 +1,12 @@
+declare const Float32Array: any;
+declare const getComputedStyle: any;
+declare const userAgent: any;
+declare const SUPPORT_TOUCH: boolean;
+declare const SUPPORT_DEVICEMOTION: boolean;
+declare const DeviceMotionEvent: any;
+declare const devicePixelRatio: any;
+declare const TRANSFORM: string;
+declare const SUPPORT_WILLCHANGE: any;
+declare let WEBXR_SUPPORTED: boolean;
+declare const checkXRSupport: () => void;
+export { Float32Array, getComputedStyle, userAgent, TRANSFORM, SUPPORT_TOUCH, SUPPORT_DEVICEMOTION, SUPPORT_WILLCHANGE, checkXRSupport, WEBXR_SUPPORTED, DeviceMotionEvent, devicePixelRatio };

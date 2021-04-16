@@ -1,0 +1,36 @@
+declare const CHROME_VERSION: number;
+declare const IS_CHROME_WITHOUT_DEVICE_MOTION: boolean;
+declare const IS_ANDROID: boolean;
+declare const CONTROL_MODE_VR = 1;
+declare const CONTROL_MODE_YAWPITCH = 2;
+declare const TOUCH_DIRECTION_NONE = 1;
+declare const TOUCH_DIRECTION_YAW = 2;
+declare const TOUCH_DIRECTION_PITCH = 4;
+declare const TOUCH_DIRECTION_ALL: number;
+declare const MC_DECELERATION = 0.0014;
+declare const MC_MAXIMUM_DURATION = 1000;
+declare const MC_BIND_SCALE: number[];
+declare const MIN_FIELD_OF_VIEW = 20;
+declare const MAX_FIELD_OF_VIEW = 110;
+declare const PAN_SCALE = 320;
+declare const DELTA_THRESHOLD = 0.0375;
+declare const YAW_RANGE_HALF = 180;
+declare const PITCH_RANGE_HALF = 90;
+declare const CIRCULAR_PITCH_RANGE_HALF = 180;
+declare const PINCH_EVENTS = "pinchstart pinchmove pinchend";
+declare const KEYMAP: {
+    LEFT_ARROW: number;
+    A: number;
+    UP_ARROW: number;
+    W: number;
+    RIGHT_ARROW: number;
+    D: number;
+    DOWN_ARROW: number;
+    S: number;
+};
+declare const GYRO_MODE: {
+    NONE: "none";
+    YAWPITCH: "yawPitch";
+    VR: "VR";
+};
+export { GYRO_MODE, CONTROL_MODE_VR, CONTROL_MODE_YAWPITCH, TOUCH_DIRECTION_NONE, TOUCH_DIRECTION_YAW, TOUCH_DIRECTION_PITCH, TOUCH_DIRECTION_ALL, MC_DECELERATION, MC_MAXIMUM_DURATION, MC_BIND_SCALE, MIN_FIELD_OF_VIEW, MAX_FIELD_OF_VIEW, PAN_SCALE, DELTA_THRESHOLD, YAW_RANGE_HALF, PITCH_RANGE_HALF, CIRCULAR_PITCH_RANGE_HALF, PINCH_EVENTS, KEYMAP, CHROME_VERSION, IS_CHROME_WITHOUT_DEVICE_MOTION, IS_ANDROID };

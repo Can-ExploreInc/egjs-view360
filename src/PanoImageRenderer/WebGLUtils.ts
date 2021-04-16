@@ -78,7 +78,7 @@ export default class WebGLUtils {
     let context: WebGLRenderingContext | null = null;
     const contextAttributes = {
       ...{
-        preserveDrawingBuffer: false,
+        preserveDrawingBuffer: true,
         antialias: false
       }, ...userContextAttributes
     };

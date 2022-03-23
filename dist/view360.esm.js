@@ -1,17 +1,19 @@
 /*
-Copyright (c) 2017 NAVER Corp.
+Copyright (c) 2017-present NAVER Corp.
 name: @egjs/view360
 license: MIT
 author: NAVER Corp.
 repository: https://github.com/naver/egjs-view360
-version: 3.4.3-snapshot
+version: 3.6.2-snapshot
 */
-import Component from '@egjs/component';
-import Promise from 'promise-polyfill';
+import Component, { ComponentEvent } from '@egjs/component';
+import Promise$1 from 'promise-polyfill';
 import agent$1 from '@egjs/agent';
 import Axes, { PanInput, WheelInput, PinchInput, MoveKeyInput } from '@egjs/axes';
 import { vec2, vec3, quat, glMatrix, mat4, mat3 } from 'gl-matrix';
 import ImReady from '@egjs/imready';
+
+var VERSION = "3.6.2-snapshot";
 
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation.
@@ -63,6 +65,145 @@ var __assign = function () {
 
   return __assign.apply(this, arguments);
 };
+function __awaiter(thisArg, _arguments, P, generator) {
+  function adopt(value) {
+    return value instanceof P ? value : new P(function (resolve) {
+      resolve(value);
+    });
+  }
+
+  return new (P || (P = Promise))(function (resolve, reject) {
+    function fulfilled(value) {
+      try {
+        step(generator.next(value));
+      } catch (e) {
+        reject(e);
+      }
+    }
+
+    function rejected(value) {
+      try {
+        step(generator["throw"](value));
+      } catch (e) {
+        reject(e);
+      }
+    }
+
+    function step(result) {
+      result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
+    }
+
+    step((generator = generator.apply(thisArg, _arguments || [])).next());
+  });
+}
+function __generator(thisArg, body) {
+  var _ = {
+    label: 0,
+    sent: function () {
+      if (t[0] & 1) throw t[1];
+      return t[1];
+    },
+    trys: [],
+    ops: []
+  },
+      f,
+      y,
+      t,
+      g;
+  return g = {
+    next: verb(0),
+    "throw": verb(1),
+    "return": verb(2)
+  }, typeof Symbol === "function" && (g[Symbol.iterator] = function () {
+    return this;
+  }), g;
+
+  function verb(n) {
+    return function (v) {
+      return step([n, v]);
+    };
+  }
+
+  function step(op) {
+    if (f) throw new TypeError("Generator is already executing.");
+
+    while (_) try {
+      if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+      if (y = 0, t) op = [op[0] & 2, t.value];
+
+      switch (op[0]) {
+        case 0:
+        case 1:
+          t = op;
+          break;
+
+        case 4:
+          _.label++;
+          return {
+            value: op[1],
+            done: false
+          };
+
+        case 5:
+          _.label++;
+          y = op[1];
+          op = [0];
+          continue;
+
+        case 7:
+          op = _.ops.pop();
+
+          _.trys.pop();
+
+          continue;
+
+        default:
+          if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) {
+            _ = 0;
+            continue;
+          }
+
+          if (op[0] === 3 && (!t || op[1] > t[0] && op[1] < t[3])) {
+            _.label = op[1];
+            break;
+          }
+
+          if (op[0] === 6 && _.label < t[1]) {
+            _.label = t[1];
+            t = op;
+            break;
+          }
+
+          if (t && _.label < t[2]) {
+            _.label = t[2];
+
+            _.ops.push(op);
+
+            break;
+          }
+
+          if (t[2]) _.ops.pop();
+
+          _.trys.pop();
+
+          continue;
+      }
+
+      op = body.call(thisArg, _);
+    } catch (e) {
+      op = [6, e];
+      y = 0;
+    } finally {
+      f = t = 0;
+    }
+
+    if (op[0] & 5) throw op[1];
+    return {
+      value: op[0] ? op[1] : void 0,
+      done: true
+    };
+  }
+}
 function __values(o) {
   var s = typeof Symbol === "function" && Symbol.iterator,
       m = s && o[s],
@@ -109,37 +250,34 @@ function __spread() {
   return ar;
 }
 
-/**
- * Copyright (c) 2015 NAVER Corp.
- * egjs projects are licensed under the MIT license
- */
+/* eslint-disable @typescript-eslint/no-implied-eval */
 /* eslint-disable no-new-func, no-nested-ternary */
 
 var win = typeof window !== "undefined" && window.Math === Math ? window : typeof self !== "undefined" && self.Math === Math ? self : Function("return this")();
 /* eslint-enable no-new-func, no-nested-ternary */
 
 var doc = win.document;
+var nav = win.navigator;
 var agent = agent$1();
 var osName = agent.os.name;
 var browserName = agent.browser.name;
 var IS_IOS = osName === "ios";
 var IS_SAFARI_ON_DESKTOP = osName === "mac" && browserName === "safari";
 
-/**
- * Copyright (c) 2015 NAVER Corp.
- * egjs projects are licensed under the MIT license
- */
+/* eslint-disable @typescript-eslint/naming-convention */
 win.Float32Array = typeof win.Float32Array !== "undefined" ? win.Float32Array : win.Array;
 var Float32Array$1 = win.Float32Array;
 var getComputedStyle = win.getComputedStyle;
-var userAgent = win.navigator.userAgent;
+var userAgent = win.navigator && win.navigator.userAgent;
 var SUPPORT_TOUCH = ("ontouchstart" in win);
 var SUPPORT_DEVICEMOTION = ("ondevicemotion" in win);
 var DeviceMotionEvent = win.DeviceMotionEvent;
 var devicePixelRatio = win.devicePixelRatio;
 
 var TRANSFORM = function () {
-  var docStyle = doc.documentElement.style;
+  var _a;
+
+  var docStyle = (_a = doc === null || doc === void 0 ? void 0 : doc.documentElement.style) !== null && _a !== void 0 ? _a : {};
   var target = ["transform", "webkitTransform", "msTransform", "mozTransform"];
 
   for (var i = 0, len = target.length; i < len; i++) {
@@ -165,11 +303,15 @@ var checkXRSupport = function () {
   if (navigator.xr.isSessionSupported) {
     navigator.xr.isSessionSupported("immersive-vr").then(function (res) {
       WEBXR_SUPPORTED = res;
-    }).catch(function () {}); // tslint:disable-line no-empty
+    }).catch(function () {
+      return void 0;
+    });
   } else if (navigator.xr.supportsSession) {
     navigator.xr.supportsSession("immersive-vr").then(function (res) {
       WEBXR_SUPPORTED = res;
-    }).catch(function () {}); // tslint:disable-line no-empty
+    }).catch(function () {
+      return void 0;
+    });
   }
 };
 
@@ -180,15 +322,15 @@ var checkXRSupport = function () {
  * modified by egjs
  */
 
-function quatToVec3(quaternion) {
+var quatToVec3 = function (quaternion) {
   var baseV = vec3.fromValues(0, 0, 1);
   vec3.transformQuat(baseV, baseV, quaternion);
   return baseV;
-}
+};
 
-function toDegree(a) {
+var toDegree = function (a) {
   return a * 180 / Math.PI;
-}
+};
 
 var util = {};
 
@@ -226,7 +368,7 @@ ROTATE_CONSTANT[ROTATE_CONSTANT.YAW_DELTA_BY_YAW] = {
   meshPoint: [0, 0, 1]
 };
 
-function getRotationDelta(prevQ, curQ, rotateKind) {
+var getRotationDelta = function (prevQ, curQ, rotateKind) {
   var targetAxis = vec3.fromValues(ROTATE_CONSTANT[rotateKind].targetAxis[0], ROTATE_CONSTANT[rotateKind].targetAxis[1], ROTATE_CONSTANT[rotateKind].targetAxis[2]);
   var meshPoint = ROTATE_CONSTANT[rotateKind].meshPoint;
   var prevQuaternion = quat.clone(prevQ);
@@ -292,13 +434,13 @@ function getRotationDelta(prevQ, curQ, rotateKind) {
 
   var deltaRadian = theta * thetaDirection * rotateDirection;
   return toDegree(deltaRadian);
-}
+};
 
-function angleBetweenVec2(v1, v2) {
+var angleBetweenVec2 = function (v1, v2) {
   var det = v1[0] * v2[1] - v2[0] * v1[1];
   var theta = -Math.atan2(det, vec2.dot(v1, v2));
   return theta;
-}
+};
 
 util.yawOffsetBetween = function (viewDir, targetDir) {
   var viewDirXZ = vec2.fromValues(viewDir[0], viewDir[2]);
@@ -309,11 +451,15 @@ util.yawOffsetBetween = function (viewDir, targetDir) {
   return theta;
 };
 
+util.sign = function (x) {
+  return Math.sign ? Math.sign(x) : Number(x > 0) - Number(x < 0) || +x;
+};
+
 util.toDegree = toDegree;
 util.getRotationDelta = getRotationDelta;
 util.angleBetweenVec2 = angleBetweenVec2;
 
-function toAxis(source, offset) {
+var toAxis = function (source, offset) {
   return offset.reduce(function (acc, v, i) {
     if (source[i]) {
       acc[source[i]] = v;
@@ -321,23 +467,63 @@ function toAxis(source, offset) {
 
     return acc;
   }, {});
+};
+
+/**
+ * Returns a number value indiciating the version of Chrome being used,
+ * or otherwise `null` if not on Chrome.
+ *
+ * Ref: https://github.com/immersive-web/cardboard-vr-display/pull/19
+ */
+
+/**
+ * In Chrome m65, `devicemotion` events are broken but subsequently fixed
+ * in 65.0.3325.148. Since many browsers use Chromium, ensure that
+ * we scope this detection by branch and build numbers to provide
+ * a proper fallback.
+ * https://github.com/immersive-web/webvr-polyfill/issues/307
+ */
+
+var version = -1; // It should not be null because it will be compared with number
+
+var branch = null;
+var build = null;
+var match = /Chrome\/([0-9]+)\.(?:[0-9]*)\.([0-9]*)\.([0-9]*)/i.exec(userAgent);
+
+if (match) {
+  version = parseInt(match[1], 10);
+  branch = match[2];
+  build = match[3];
 }
 
-/*
- * Copyright 2016 Google Inc. All Rights Reserved.
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-var MathUtil = window.MathUtil || {};
+var CHROME_VERSION = version;
+var IS_CHROME_WITHOUT_DEVICE_MOTION = version === 65 && branch === "3325" && parseInt(build, 10) < 148;
+var IS_ANDROID = /Android/i.test(userAgent);
+var CONTROL_MODE_VR = 1;
+var CONTROL_MODE_YAWPITCH = 2;
+var TOUCH_DIRECTION_NONE = 1;
+var TOUCH_DIRECTION_YAW = 2;
+var TOUCH_DIRECTION_PITCH = 4;
+var TOUCH_DIRECTION_ALL = TOUCH_DIRECTION_YAW | TOUCH_DIRECTION_PITCH;
+/* Const for MovableCoord */
+
+var MC_DECELERATION = 0.0014;
+var MC_MAXIMUM_DURATION = 1000;
+var MC_BIND_SCALE = [0.20, 0.20];
+var MAX_FIELD_OF_VIEW = 110;
+var PAN_SCALE = 320; // const DELTA_THRESHOLD = 0.015;
+
+var YAW_RANGE_HALF = 180;
+var PITCH_RANGE_HALF = 90;
+var CIRCULAR_PITCH_RANGE_HALF = 180;
+var GYRO_MODE = {
+  NONE: "none",
+  YAWPITCH: "yawPitch",
+  VR: "VR"
+};
+
+/* eslint-disable */
+var MathUtil = win.MathUtil || {};
 MathUtil.degToRad = Math.PI / 180;
 MathUtil.radToDeg = 180 / Math.PI; // Some minimal math functionality borrowed from THREE.Math and stripped down
 // for the purposes of this library.
@@ -431,12 +617,12 @@ MathUtil.Vector3.prototype = {
     return this.x * v.x + this.y * v.y + this.z * v.z;
   },
   crossVectors: function (a, b) {
-    var ax = a.x,
-        ay = a.y,
-        az = a.z;
-    var bx = b.x,
-        by = b.y,
-        bz = b.z;
+    var ax = a.x;
+    var ay = a.y;
+    var az = a.z;
+    var bx = b.x;
+    var by = b.y;
+    var bz = b.z;
     this.x = ay * bz - az * by;
     this.y = az * bx - ax * bz;
     this.z = ax * by - ay * bx;
@@ -496,8 +682,8 @@ MathUtil.Quaternion.prototype = {
   setFromAxisAngle: function (axis, angle) {
     // http://www.euclideanspace.com/maths/geometry/rotations/conversions/angleToQuaternion/index.htm
     // assumes axis is normalized
-    var halfAngle = angle / 2,
-        s = Math.sin(halfAngle);
+    var halfAngle = angle / 2;
+    var s = Math.sin(halfAngle);
     this.x = axis.x * s;
     this.y = axis.y * s;
     this.z = axis.z * s;
@@ -509,14 +695,14 @@ MathUtil.Quaternion.prototype = {
   },
   multiplyQuaternions: function (a, b) {
     // from http://www.euclideanspace.com/maths/algebra/realNormedAlgebra/quaternions/code/index.htm
-    var qax = a.x,
-        qay = a.y,
-        qaz = a.z,
-        qaw = a.w;
-    var qbx = b.x,
-        qby = b.y,
-        qbz = b.z,
-        qbw = b.w;
+    var qax = a.x;
+    var qay = a.y;
+    var qaz = a.z;
+    var qaw = a.w;
+    var qbx = b.x;
+    var qby = b.y;
+    var qbz = b.z;
+    var qbw = b.w;
     this.x = qax * qbw + qaw * qbx + qay * qbz - qaz * qby;
     this.y = qay * qbw + qaw * qby + qaz * qbx - qax * qbz;
     this.z = qaz * qbw + qaw * qbz + qax * qby - qay * qbx;
@@ -551,10 +737,10 @@ MathUtil.Quaternion.prototype = {
   slerp: function (qb, t) {
     if (t === 0) return this;
     if (t === 1) return this.copy(qb);
-    var x = this.x,
-        y = this.y,
-        z = this.z,
-        w = this.w; // http://www.euclideanspace.com/maths/algebra/realNormedAlgebra/quaternions/slerp/
+    var x = this.x;
+    var y = this.y;
+    var z = this.z;
+    var w = this.w; // http://www.euclideanspace.com/maths/algebra/realNormedAlgebra/quaternions/slerp/
 
     var cosHalfTheta = w * qb.w + x * qb.x + y * qb.y + z * qb.z;
 
@@ -587,8 +773,8 @@ MathUtil.Quaternion.prototype = {
       return this;
     }
 
-    var ratioA = Math.sin((1 - t) * halfTheta) / sinHalfTheta,
-        ratioB = Math.sin(t * halfTheta) / sinHalfTheta;
+    var ratioA = Math.sin((1 - t) * halfTheta) / sinHalfTheta;
+    var ratioB = Math.sin(t * halfTheta) / sinHalfTheta;
     this.w = w * ratioA + this.w * ratioB;
     this.x = x * ratioA + this.x * ratioB;
     this.y = y * ratioA + this.y * ratioB;
@@ -598,7 +784,8 @@ MathUtil.Quaternion.prototype = {
   setFromUnitVectors: function () {
     // http://lolengine.net/blog/2014/02/24/quaternion-from-two-vectors-final
     // assumes direction vectors vFrom and vTo are normalized
-    var v1, r;
+    var v1;
+    var r;
     var EPS = 0.000001;
     return function (vFrom, vTo) {
       if (v1 === undefined) v1 = new MathUtil.Vector3();
@@ -625,7 +812,8 @@ MathUtil.Quaternion.prototype = {
     };
   }()
 };
-var mathUtil = MathUtil;
+
+/* eslint-disable */
 
 /*
  * Copyright 2015 Google Inc. All Rights Reserved.
@@ -641,12 +829,14 @@ var mathUtil = MathUtil;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-var Util = window.Util || {};
+var _a; // tslint:disable: only-arrow-functions
+var userAgent$1 = (_a = nav === null || nav === void 0 ? void 0 : nav.userAgent) !== null && _a !== void 0 ? _a : "";
+var Util = win.Util || {};
 Util.MIN_TIMESTEP = 0.001;
 Util.MAX_TIMESTEP = 1;
 
 Util.base64 = function (mimeType, base64) {
-  return 'data:' + mimeType + ';base64,' + base64;
+  return "data:" + mimeType + ";base64," + base64;
 };
 
 Util.clamp = function (value, min, max) {
@@ -658,42 +848,42 @@ Util.lerp = function (a, b, t) {
 };
 
 Util.isIOS = function () {
-  var isIOS = /iPad|iPhone|iPod/.test(navigator.platform);
+  var isIOS = /iPad|iPhone|iPod/.test(nav === null || nav === void 0 ? void 0 : nav.platform);
   return function () {
     return isIOS;
   };
 }();
 
 Util.isWebViewAndroid = function () {
-  var isWebViewAndroid = navigator.userAgent.indexOf('Version') !== -1 && navigator.userAgent.indexOf('Android') !== -1 && navigator.userAgent.indexOf('Chrome') !== -1;
+  var isWebViewAndroid = userAgent$1.indexOf("Version") !== -1 && userAgent$1.indexOf("Android") !== -1 && userAgent$1.indexOf("Chrome") !== -1;
   return function () {
     return isWebViewAndroid;
   };
 }();
 
 Util.isSafari = function () {
-  var isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+  var isSafari = /^((?!chrome|android).)*safari/i.test(userAgent$1);
   return function () {
     return isSafari;
   };
 }();
 
 Util.isFirefoxAndroid = function () {
-  var isFirefoxAndroid = navigator.userAgent.indexOf('Firefox') !== -1 && navigator.userAgent.indexOf('Android') !== -1;
+  var isFirefoxAndroid = userAgent$1.indexOf("Firefox") !== -1 && userAgent$1.indexOf("Android") !== -1;
   return function () {
     return isFirefoxAndroid;
   };
 }();
 
 Util.isR7 = function () {
-  var isR7 = navigator.userAgent.indexOf('R7 Build') !== -1;
+  var isR7 = userAgent$1.indexOf("R7 Build") !== -1;
   return function () {
     return isR7;
   };
 }();
 
 Util.isLandscapeMode = function () {
-  var rtn = window.orientation == 90 || window.orientation == -90;
+  var rtn = win.orientation === 90 || win.orientation === -90;
   return Util.isR7() ? !rtn : rtn;
 }; // Helper method to validate the time steps of sensor timestamps.
 
@@ -715,11 +905,11 @@ Util.isTimestampDeltaValid = function (timestampDeltaS) {
 };
 
 Util.getScreenWidth = function () {
-  return Math.max(window.screen.width, window.screen.height) * window.devicePixelRatio;
+  return Math.max(win.screen.width, win.screen.height) * win.devicePixelRatio;
 };
 
 Util.getScreenHeight = function () {
-  return Math.min(window.screen.width, window.screen.height) * window.devicePixelRatio;
+  return Math.min(win.screen.width, win.screen.height) * win.devicePixelRatio;
 };
 
 Util.requestFullscreen = function (element) {
@@ -743,14 +933,14 @@ Util.requestFullscreen = function (element) {
 };
 
 Util.exitFullscreen = function () {
-  if (document.exitFullscreen) {
-    document.exitFullscreen();
-  } else if (document.webkitExitFullscreen) {
-    document.webkitExitFullscreen();
-  } else if (document.mozCancelFullScreen) {
-    document.mozCancelFullScreen();
-  } else if (document.msExitFullscreen) {
-    document.msExitFullscreen();
+  if (doc.exitFullscreen) {
+    doc.exitFullscreen();
+  } else if (doc.webkitExitFullscreen) {
+    doc.webkitExitFullscreen();
+  } else if (doc.mozCancelFullScreen) {
+    doc.mozCancelFullScreen();
+  } else if (doc.msExitFullscreen) {
+    doc.msExitFullscreen();
   } else {
     return false;
   }
@@ -759,7 +949,7 @@ Util.exitFullscreen = function () {
 };
 
 Util.getFullscreenElement = function () {
-  return document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement;
+  return doc.fullscreenElement || doc.webkitFullscreenElement || doc.mozFullScreenElement || doc.msFullscreenElement;
 };
 
 Util.linkProgram = function (gl, vertexSource, fragmentSource, attribLocationMap) {
@@ -785,11 +975,11 @@ Util.linkProgram = function (gl, vertexSource, fragmentSource, attribLocationMap
 Util.getProgramUniforms = function (gl, program) {
   var uniforms = {};
   var uniformCount = gl.getProgramParameter(program, gl.ACTIVE_UNIFORMS);
-  var uniformName = '';
+  var uniformName = "";
 
   for (var i = 0; i < uniformCount; i++) {
     var uniformInfo = gl.getActiveUniform(program, i);
-    uniformName = uniformInfo.name.replace('[0]', '');
+    uniformName = uniformInfo.name.replace("[0]", "");
     uniforms[uniformName] = gl.getUniformLocation(program, uniformName);
   }
 
@@ -797,9 +987,9 @@ Util.getProgramUniforms = function (gl, program) {
 };
 
 Util.orthoMatrix = function (out, left, right, bottom, top, near, far) {
-  var lr = 1 / (left - right),
-      bt = 1 / (bottom - top),
-      nf = 1 / (near - far);
+  var lr = 1 / (left - right);
+  var bt = 1 / (bottom - top);
+  var nf = 1 / (near - far);
   out[0] = -2 * lr;
   out[1] = 0;
   out[2] = 0;
@@ -830,7 +1020,7 @@ Util.isMobile = function () {
 
   (function (a) {
     if (/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino/i.test(a) || /1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(a.substr(0, 4))) check = true;
-  })(navigator.userAgent || navigator.vendor || window.opera);
+  })(userAgent$1 || (nav === null || nav === void 0 ? void 0 : nav.vendor) || win.opera);
 
   return check;
 };
@@ -854,29 +1044,29 @@ Util.safariCssSizeWorkaround = function (canvas) {
   //  for hate's sake I spit my last breath at thee."
   // -- Moby Dick, by Herman Melville
   if (Util.isIOS()) {
-    var width = canvas.style.width;
-    var height = canvas.style.height;
-    canvas.style.width = parseInt(width) + 1 + 'px';
-    canvas.style.height = parseInt(height) + 'px';
+    var width_1 = canvas.style.width;
+    var height_1 = canvas.style.height;
+    canvas.style.width = parseInt(width_1) + 1 + "px";
+    canvas.style.height = parseInt(height_1) + "px";
     setTimeout(function () {
-      canvas.style.width = width;
-      canvas.style.height = height;
+      canvas.style.width = width_1;
+      canvas.style.height = height_1;
     }, 100);
   } // Debug only.
 
 
-  window.Util = Util;
-  window.canvas = canvas;
+  win.Util = Util;
+  win.canvas = canvas;
 };
 
 Util.isDebug = function () {
-  return Util.getQueryParameter('debug');
+  return Util.getQueryParameter("debug");
 };
 
 Util.getQueryParameter = function (name) {
-  var name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
-  var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
-      results = regex.exec(location.search);
+  name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+  var regex = new RegExp("[\\?&]" + name + "=([^&#]*)");
+  var results = regex.exec(location.search);
   return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
 };
 
@@ -885,12 +1075,12 @@ Util.frameDataFromPose = function () {
   var rad45 = Math.PI * 0.25; // Borrowed from glMatrix.
 
   function mat4_perspectiveFromFieldOfView(out, fov, near, far) {
-    var upTan = Math.tan(fov ? fov.upDegrees * piOver180 : rad45),
-        downTan = Math.tan(fov ? fov.downDegrees * piOver180 : rad45),
-        leftTan = Math.tan(fov ? fov.leftDegrees * piOver180 : rad45),
-        rightTan = Math.tan(fov ? fov.rightDegrees * piOver180 : rad45),
-        xScale = 2.0 / (leftTan + rightTan),
-        yScale = 2.0 / (upTan + downTan);
+    var upTan = Math.tan(fov ? fov.upDegrees * piOver180 : rad45);
+    var downTan = Math.tan(fov ? fov.downDegrees * piOver180 : rad45);
+    var leftTan = Math.tan(fov ? fov.leftDegrees * piOver180 : rad45);
+    var rightTan = Math.tan(fov ? fov.rightDegrees * piOver180 : rad45);
+    var xScale = 2.0 / (leftTan + rightTan);
+    var yScale = 2.0 / (upTan + downTan);
     out[0] = xScale;
     out[1] = 0.0;
     out[2] = 0.0;
@@ -912,22 +1102,22 @@ Util.frameDataFromPose = function () {
 
   function mat4_fromRotationTranslation(out, q, v) {
     // Quaternion math
-    var x = q[0],
-        y = q[1],
-        z = q[2],
-        w = q[3],
-        x2 = x + x,
-        y2 = y + y,
-        z2 = z + z,
-        xx = x * x2,
-        xy = x * y2,
-        xz = x * z2,
-        yy = y * y2,
-        yz = y * z2,
-        zz = z * z2,
-        wx = w * x2,
-        wy = w * y2,
-        wz = w * z2;
+    var x = q[0];
+    var y = q[1];
+    var z = q[2];
+    var w = q[3];
+    var x2 = x + x;
+    var y2 = y + y;
+    var z2 = z + z;
+    var xx = x * x2;
+    var xy = x * y2;
+    var xz = x * z2;
+    var yy = y * y2;
+    var yz = y * z2;
+    var zz = z * z2;
+    var wx = w * x2;
+    var wy = w * y2;
+    var wz = w * z2;
     out[0] = 1 - (yy + zz);
     out[1] = xy + wz;
     out[2] = xz - wy;
@@ -948,21 +1138,21 @@ Util.frameDataFromPose = function () {
   }
 
   function mat4_translate(out, a, v) {
-    var x = v[0],
-        y = v[1],
-        z = v[2],
-        a00,
-        a01,
-        a02,
-        a03,
-        a10,
-        a11,
-        a12,
-        a13,
-        a20,
-        a21,
-        a22,
-        a23;
+    var x = v[0];
+    var y = v[1];
+    var z = v[2];
+    var a00;
+    var a01;
+    var a02;
+    var a03;
+    var a10;
+    var a11;
+    var a12;
+    var a13;
+    var a20;
+    var a21;
+    var a22;
+    var a23;
 
     if (a === out) {
       out[12] = a[0] * x + a[4] * y + a[8] * z + a[12];
@@ -1004,36 +1194,36 @@ Util.frameDataFromPose = function () {
   }
 
   function mat4_invert(out, a) {
-    var a00 = a[0],
-        a01 = a[1],
-        a02 = a[2],
-        a03 = a[3],
-        a10 = a[4],
-        a11 = a[5],
-        a12 = a[6],
-        a13 = a[7],
-        a20 = a[8],
-        a21 = a[9],
-        a22 = a[10],
-        a23 = a[11],
-        a30 = a[12],
-        a31 = a[13],
-        a32 = a[14],
-        a33 = a[15],
-        b00 = a00 * a11 - a01 * a10,
-        b01 = a00 * a12 - a02 * a10,
-        b02 = a00 * a13 - a03 * a10,
-        b03 = a01 * a12 - a02 * a11,
-        b04 = a01 * a13 - a03 * a11,
-        b05 = a02 * a13 - a03 * a12,
-        b06 = a20 * a31 - a21 * a30,
-        b07 = a20 * a32 - a22 * a30,
-        b08 = a20 * a33 - a23 * a30,
-        b09 = a21 * a32 - a22 * a31,
-        b10 = a21 * a33 - a23 * a31,
-        b11 = a22 * a33 - a23 * a32,
-        // Calculate the determinant
-    det = b00 * b11 - b01 * b10 + b02 * b09 + b03 * b08 - b04 * b07 + b05 * b06;
+    var a00 = a[0];
+    var a01 = a[1];
+    var a02 = a[2];
+    var a03 = a[3];
+    var a10 = a[4];
+    var a11 = a[5];
+    var a12 = a[6];
+    var a13 = a[7];
+    var a20 = a[8];
+    var a21 = a[9];
+    var a22 = a[10];
+    var a23 = a[11];
+    var a30 = a[12];
+    var a31 = a[13];
+    var a32 = a[14];
+    var a33 = a[15];
+    var b00 = a00 * a11 - a01 * a10;
+    var b01 = a00 * a12 - a02 * a10;
+    var b02 = a00 * a13 - a03 * a10;
+    var b03 = a01 * a12 - a02 * a11;
+    var b04 = a01 * a13 - a03 * a11;
+    var b05 = a02 * a13 - a03 * a12;
+    var b06 = a20 * a31 - a21 * a30;
+    var b07 = a20 * a32 - a22 * a30;
+    var b08 = a20 * a33 - a23 * a30;
+    var b09 = a21 * a32 - a22 * a31;
+    var b10 = a21 * a33 - a23 * a31;
+    var b11 = a22 * a33 - a23 * a32; // Calculate the determinant
+
+    var det = b00 * b11 - b01 * b10 + b02 * b09 + b03 * b08 - b04 * b07 + b05 * b06;
 
     if (!det) {
       return null;
@@ -1058,6 +1248,7 @@ Util.frameDataFromPose = function () {
     out[15] = (a20 * b03 - a21 * b01 + a22 * b00) * det;
     return out;
   }
+
   var defaultOrientation = new Float32Array([0, 0, 0, 1]);
   var defaultPosition = new Float32Array([0, 0, 0]);
 
@@ -1081,9 +1272,9 @@ Util.frameDataFromPose = function () {
 }();
 
 Util.isInsideCrossDomainIFrame = function () {
-  var isFramed = window.self !== window.top;
-  var refDomain = Util.getDomainFromUrl(document.referrer);
-  var thisDomain = Util.getDomainFromUrl(window.location.href);
+  var isFramed = win.self !== win.top;
+  var refDomain = Util.getDomainFromUrl(doc.referrer);
+  var thisDomain = Util.getDomainFromUrl(win.location.href);
   return isFramed && refDomain !== thisDomain;
 }; // From http://stackoverflow.com/a/23945027.
 
@@ -1092,148 +1283,79 @@ Util.getDomainFromUrl = function (url) {
   var domain; // Find & remove protocol (http, ftp, etc.) and get domain.
 
   if (url.indexOf("://") > -1) {
-    domain = url.split('/')[2];
+    domain = url.split("/")[2];
   } else {
-    domain = url.split('/')[0];
-  } //find & remove port number
+    domain = url.split("/")[0];
+  } // find & remove port number
 
 
-  domain = domain.split(':')[0];
+  domain = domain.split(":")[0];
   return domain;
 };
 
-var util$1 = Util;
-
-/*
- * Copyright 2015 Google Inc. All Rights Reserved.
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-
-
+/* eslint-disable */
 /**
  * Given an orientation and the gyroscope data, predicts the future orientation
  * of the head. This makes rendering appear faster.
  *
  * Also see: http://msl.cs.uiuc.edu/~lavalle/papers/LavYerKatAnt14.pdf
- *
  * @param {Number} predictionTimeS time from head movement to the appearance of
  * the corresponding image.
  */
 
+var PosePredictor =
+/*#__PURE__*/
+function () {
+  function PosePredictor(predictionTimeS) {
+    this.predictionTimeS = predictionTimeS; // The quaternion corresponding to the previous state.
 
-function PosePredictor(predictionTimeS) {
-  this.predictionTimeS = predictionTimeS; // The quaternion corresponding to the previous state.
+    this.previousQ = new MathUtil.Quaternion(); // Previous time a prediction occurred.
 
-  this.previousQ = new mathUtil.Quaternion(); // Previous time a prediction occurred.
+    this.previousTimestampS = null; // The delta quaternion that adjusts the current pose.
 
-  this.previousTimestampS = null; // The delta quaternion that adjusts the current pose.
+    this.deltaQ = new MathUtil.Quaternion(); // The output quaternion.
 
-  this.deltaQ = new mathUtil.Quaternion(); // The output quaternion.
+    this.outQ = new MathUtil.Quaternion();
+  }
 
-  this.outQ = new mathUtil.Quaternion();
-}
+  var __proto = PosePredictor.prototype;
 
-var __proto = PosePredictor.prototype;
+  __proto.getPrediction = function (currentQ, gyro, timestampS) {
+    if (!this.previousTimestampS) {
+      this.previousQ.copy(currentQ);
+      this.previousTimestampS = timestampS;
+      return currentQ;
+    } // Calculate axis and angle based on gyroscope rotation rate data.
 
-__proto.getPrediction = function (currentQ, gyro, timestampS) {
-  if (!this.previousTimestampS) {
+
+    var axis = new MathUtil.Vector3();
+    axis.copy(gyro);
+    axis.normalize();
+    var angularSpeed = gyro.length(); // If we're rotating slowly, don't do prediction.
+
+    if (angularSpeed < MathUtil.degToRad * 20) {
+      if (Util.isDebug()) {
+        console.log("Moving slowly, at %s deg/s: no prediction", (MathUtil.radToDeg * angularSpeed).toFixed(1));
+      }
+
+      this.outQ.copy(currentQ);
+      this.previousQ.copy(currentQ);
+      return this.outQ;
+    } // Get the predicted angle based on the time delta and latency.
+
+
+    var deltaT = timestampS - this.previousTimestampS;
+    var predictAngle = angularSpeed * this.predictionTimeS;
+    this.deltaQ.setFromAxisAngle(axis, predictAngle);
+    this.outQ.copy(this.previousQ);
+    this.outQ.multiply(this.deltaQ);
     this.previousQ.copy(currentQ);
     this.previousTimestampS = timestampS;
-    return currentQ;
-  } // Calculate axis and angle based on gyroscope rotation rate data.
-
-
-  var axis = new mathUtil.Vector3();
-  axis.copy(gyro);
-  axis.normalize();
-  var angularSpeed = gyro.length(); // If we're rotating slowly, don't do prediction.
-
-  if (angularSpeed < mathUtil.degToRad * 20) {
-    if (util$1.isDebug()) {
-      console.log('Moving slowly, at %s deg/s: no prediction', (mathUtil.radToDeg * angularSpeed).toFixed(1));
-    }
-
-    this.outQ.copy(currentQ);
-    this.previousQ.copy(currentQ);
     return this.outQ;
-  } // Get the predicted angle based on the time delta and latency.
+  };
 
-
-  var deltaT = timestampS - this.previousTimestampS;
-  var predictAngle = angularSpeed * this.predictionTimeS;
-  this.deltaQ.setFromAxisAngle(axis, predictAngle);
-  this.outQ.copy(this.previousQ);
-  this.outQ.multiply(this.deltaQ);
-  this.previousQ.copy(currentQ);
-  this.previousTimestampS = timestampS;
-  return this.outQ;
-};
-
-var posePredictor = PosePredictor;
-
-/**
- * Returns a number value indiciating the version of Chrome being used,
- * or otherwise `null` if not on Chrome.
- *
- * Ref: https://github.com/immersive-web/cardboard-vr-display/pull/19
- */
-
-/**
- * In Chrome m65, `devicemotion` events are broken but subsequently fixed
- * in 65.0.3325.148. Since many browsers use Chromium, ensure that
- * we scope this detection by branch and build numbers to provide
- * a proper fallback.
- * https://github.com/immersive-web/webvr-polyfill/issues/307
- */
-
-var version = -1; // It should not be null because it will be compared with number
-
-var branch = null;
-var build = null;
-var match = /Chrome\/([0-9]+)\.(?:[0-9]*)\.([0-9]*)\.([0-9]*)/i.exec(userAgent);
-
-if (match) {
-  version = parseInt(match[1], 10);
-  branch = match[2];
-  build = match[3];
-}
-
-var CHROME_VERSION = version;
-var IS_CHROME_WITHOUT_DEVICE_MOTION = version === 65 && branch === "3325" && parseInt(build, 10) < 148;
-var IS_ANDROID = /Android/i.test(userAgent);
-var CONTROL_MODE_VR = 1;
-var CONTROL_MODE_YAWPITCH = 2;
-var TOUCH_DIRECTION_NONE = 1;
-var TOUCH_DIRECTION_YAW = 2;
-var TOUCH_DIRECTION_PITCH = 4;
-var TOUCH_DIRECTION_ALL = TOUCH_DIRECTION_YAW | TOUCH_DIRECTION_PITCH;
-/* Const for MovableCoord */
-
-var MC_DECELERATION = 0.0014;
-var MC_MAXIMUM_DURATION = 1000;
-var MC_BIND_SCALE = [0.20, 0.20];
-var MAX_FIELD_OF_VIEW = 110;
-var PAN_SCALE = 320; // const DELTA_THRESHOLD = 0.015;
-
-var YAW_RANGE_HALF = 180;
-var PITCH_RANGE_HALF = 90;
-var CIRCULAR_PITCH_RANGE_HALF = 180;
-var GYRO_MODE = {
-  NONE: "none",
-  YAWPITCH: "yawPitch",
-  VR: "VR"
-};
+  return PosePredictor;
+}();
 
 var STILLNESS_THRESHOLD = 200; // millisecond
 
@@ -1299,7 +1421,7 @@ function (_super) {
     alpha = (alpha || 0) * Math.PI / 180;
     beta = (beta || 0) * Math.PI / 180;
     gamma = (gamma || 0) * Math.PI / 180;
-    this.trigger("devicemotion", {
+    this.trigger(new ComponentEvent("devicemotion", {
       inputEvent: {
         deviceorientation: {
           alpha: alpha,
@@ -1307,7 +1429,7 @@ function (_super) {
           gamma: -gamma
         }
       }
-    });
+    }));
   };
 
   __proto._onDeviceOrientation = function () {
@@ -1366,50 +1488,36 @@ function (_super) {
       };
     }
 
-    this.trigger("devicemotion", {
+    this.trigger(new ComponentEvent("devicemotion", {
       inputEvent: devicemotionEvent
-    });
+    }));
   };
 
   return DeviceMotion;
 }(Component);
 
-function SensorSample(sample, timestampS) {
-  this.set(sample, timestampS);
-}
+var SensorSample =
+/*#__PURE__*/
+function () {
+  function SensorSample(sample, timestampS) {
+    this.set(sample, timestampS);
+  }
 
-var __proto$1 = SensorSample.prototype;
+  var __proto = SensorSample.prototype;
 
-__proto$1.set = function (sample, timestampS) {
-  this.sample = sample;
-  this.timestampS = timestampS;
-};
+  __proto.set = function (sample, timestampS) {
+    this.sample = sample;
+    this.timestampS = timestampS;
+  };
 
-__proto$1.copy = function (sensorSample) {
-  this.set(sensorSample.sample, sensorSample.timestampS);
-};
+  __proto.copy = function (sensorSample) {
+    this.set(sensorSample.sample, sensorSample.timestampS);
+  };
 
-var sensorSample = SensorSample;
+  return SensorSample;
+}();
 
-/*
- * Copyright 2015 Google Inc. All Rights Reserved.
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-
-
-
-
+/* eslint-disable */
 /**
  * An implementation of a simple complementary filter, which fuses gyroscope and
  * accelerometer data from the 'devicemotion' event.
@@ -1425,52 +1533,126 @@ var sensorSample = SensorSample;
  *    short term.
  */
 
+var ComplementaryFilter =
+/*#__PURE__*/
+function () {
+  function ComplementaryFilter(kFilter) {
+    this.addGyroMeasurement = function (vector, timestampS) {
+      this.currentGyroMeasurement.set(vector, timestampS);
+      var deltaT = timestampS - this.previousGyroMeasurement.timestampS;
 
-function ComplementaryFilter(kFilter) {
-  this.kFilter = kFilter; // Raw sensor measurements.
+      if (Util.isTimestampDeltaValid(deltaT)) {
+        this.run_();
+      }
 
-  this.currentAccelMeasurement = new sensorSample();
-  this.currentGyroMeasurement = new sensorSample();
-  this.previousGyroMeasurement = new sensorSample(); // Set default look direction to be in the correct direction.
+      this.previousGyroMeasurement.copy(this.currentGyroMeasurement);
+    };
 
-  if (util$1.isIOS()) {
-    this.filterQ = new mathUtil.Quaternion(-1, 0, 0, 1);
-  } else {
-    this.filterQ = new mathUtil.Quaternion(1, 0, 0, 1);
+    this.kFilter = kFilter; // Raw sensor measurements.
+
+    this.currentAccelMeasurement = new SensorSample();
+    this.currentGyroMeasurement = new SensorSample();
+    this.previousGyroMeasurement = new SensorSample(); // Set default look direction to be in the correct direction.
+
+    if (Util.isIOS()) {
+      this.filterQ = new MathUtil.Quaternion(-1, 0, 0, 1);
+    } else {
+      this.filterQ = new MathUtil.Quaternion(1, 0, 0, 1);
+    }
+
+    this.previousFilterQ = new MathUtil.Quaternion();
+    this.previousFilterQ.copy(this.filterQ); // Orientation based on the accelerometer.
+
+    this.accelQ = new MathUtil.Quaternion(); // Whether or not the orientation has been initialized.
+
+    this.isOrientationInitialized = false; // Running estimate of gravity based on the current orientation.
+
+    this.estimatedGravity = new MathUtil.Vector3(); // Measured gravity based on accelerometer.
+
+    this.measuredGravity = new MathUtil.Vector3(); // Debug only quaternion of gyro-based orientation.
+
+    this.gyroIntegralQ = new MathUtil.Quaternion();
   }
 
-  this.previousFilterQ = new mathUtil.Quaternion();
-  this.previousFilterQ.copy(this.filterQ); // Orientation based on the accelerometer.
+  var __proto = ComplementaryFilter.prototype;
 
-  this.accelQ = new mathUtil.Quaternion(); // Whether or not the orientation has been initialized.
+  __proto.addAccelMeasurement = function (vector, timestampS) {
+    this.currentAccelMeasurement.set(vector, timestampS);
+  };
 
-  this.isOrientationInitialized = false; // Running estimate of gravity based on the current orientation.
+  __proto.getOrientation = function () {
+    return this.filterQ;
+  };
 
-  this.estimatedGravity = new mathUtil.Vector3(); // Measured gravity based on accelerometer.
+  __proto.run_ = function () {
+    if (!this.isOrientationInitialized) {
+      this.accelQ = this.accelToQuaternion_(this.currentAccelMeasurement.sample);
+      this.previousFilterQ.copy(this.accelQ);
+      this.isOrientationInitialized = true;
+      return;
+    }
 
-  this.measuredGravity = new mathUtil.Vector3(); // Debug only quaternion of gyro-based orientation.
+    var deltaT = this.currentGyroMeasurement.timestampS - this.previousGyroMeasurement.timestampS; // Convert gyro rotation vector to a quaternion delta.
 
-  this.gyroIntegralQ = new mathUtil.Quaternion();
-}
+    var gyroDeltaQ = this.gyroToQuaternionDelta_(this.currentGyroMeasurement.sample, deltaT);
+    this.gyroIntegralQ.multiply(gyroDeltaQ); // filter_1 = K * (filter_0 + gyro * dT) + (1 - K) * accel.
 
-var __proto$2 = ComplementaryFilter.prototype;
+    this.filterQ.copy(this.previousFilterQ);
+    this.filterQ.multiply(gyroDeltaQ); // Calculate the delta between the current estimated gravity and the real
+    // gravity vector from accelerometer.
 
-__proto$2.addAccelMeasurement = function (vector, timestampS) {
-  this.currentAccelMeasurement.set(vector, timestampS);
-};
+    var invFilterQ = new MathUtil.Quaternion();
+    invFilterQ.copy(this.filterQ);
+    invFilterQ.inverse();
+    this.estimatedGravity.set(0, 0, -1);
+    this.estimatedGravity.applyQuaternion(invFilterQ);
+    this.estimatedGravity.normalize();
+    this.measuredGravity.copy(this.currentAccelMeasurement.sample);
+    this.measuredGravity.normalize(); // Compare estimated gravity with measured gravity, get the delta quaternion
+    // between the two.
 
-__proto$2.addGyroMeasurement = function (vector, timestampS) {
-  this.currentGyroMeasurement.set(vector, timestampS);
-  var deltaT = timestampS - this.previousGyroMeasurement.timestampS;
+    var deltaQ = new MathUtil.Quaternion();
+    deltaQ.setFromUnitVectors(this.estimatedGravity, this.measuredGravity);
+    deltaQ.inverse();
 
-  if (util$1.isTimestampDeltaValid(deltaT)) {
-    this.run_();
-  }
+    if (Util.isDebug()) {
+      console.log("Delta: %d deg, G_est: (%s, %s, %s), G_meas: (%s, %s, %s)", MathUtil.radToDeg * Util.getQuaternionAngle(deltaQ), this.estimatedGravity.x.toFixed(1), this.estimatedGravity.y.toFixed(1), this.estimatedGravity.z.toFixed(1), this.measuredGravity.x.toFixed(1), this.measuredGravity.y.toFixed(1), this.measuredGravity.z.toFixed(1));
+    } // Calculate the SLERP target: current orientation plus the measured-estimated
+    // quaternion delta.
 
-  this.previousGyroMeasurement.copy(this.currentGyroMeasurement);
-};
 
-__proto$2.run_ = function () {
+    var targetQ = new MathUtil.Quaternion();
+    targetQ.copy(this.filterQ);
+    targetQ.multiply(deltaQ); // SLERP factor: 0 is pure gyro, 1 is pure accel.
+
+    this.filterQ.slerp(targetQ, 1 - this.kFilter);
+    this.previousFilterQ.copy(this.filterQ);
+  };
+
+  __proto.accelToQuaternion_ = function (accel) {
+    var normAccel = new MathUtil.Vector3();
+    normAccel.copy(accel);
+    normAccel.normalize();
+    var quat = new MathUtil.Quaternion();
+    quat.setFromUnitVectors(new MathUtil.Vector3(0, 0, -1), normAccel);
+    quat.inverse();
+    return quat;
+  };
+
+  __proto.gyroToQuaternionDelta_ = function (gyro, dt) {
+    // Extract axis and angle from the gyroscope data.
+    var quat = new MathUtil.Quaternion();
+    var axis = new MathUtil.Vector3();
+    axis.copy(gyro);
+    axis.normalize();
+    quat.setFromAxisAngle(axis, gyro.length() * dt);
+    return quat;
+  };
+
+  return ComplementaryFilter;
+}();
+
+ComplementaryFilter.prototype.run_ = function () {
   if (!this.isOrientationInitialized) {
     this.accelQ = this.accelToQuaternion_(this.currentAccelMeasurement.sample);
     this.previousFilterQ.copy(this.accelQ);
@@ -1487,7 +1669,7 @@ __proto$2.run_ = function () {
   this.filterQ.multiply(gyroDeltaQ); // Calculate the delta between the current estimated gravity and the real
   // gravity vector from accelerometer.
 
-  var invFilterQ = new mathUtil.Quaternion();
+  var invFilterQ = new MathUtil.Quaternion();
   invFilterQ.copy(this.filterQ);
   invFilterQ.inverse();
   this.estimatedGravity.set(0, 0, -1);
@@ -1497,83 +1679,12 @@ __proto$2.run_ = function () {
   this.measuredGravity.normalize(); // Compare estimated gravity with measured gravity, get the delta quaternion
   // between the two.
 
-  var deltaQ = new mathUtil.Quaternion();
-  deltaQ.setFromUnitVectors(this.estimatedGravity, this.measuredGravity);
-  deltaQ.inverse();
-
-  if (util$1.isDebug()) {
-    console.log('Delta: %d deg, G_est: (%s, %s, %s), G_meas: (%s, %s, %s)', mathUtil.radToDeg * util$1.getQuaternionAngle(deltaQ), this.estimatedGravity.x.toFixed(1), this.estimatedGravity.y.toFixed(1), this.estimatedGravity.z.toFixed(1), this.measuredGravity.x.toFixed(1), this.measuredGravity.y.toFixed(1), this.measuredGravity.z.toFixed(1));
-  } // Calculate the SLERP target: current orientation plus the measured-estimated
-  // quaternion delta.
-
-
-  var targetQ = new mathUtil.Quaternion();
-  targetQ.copy(this.filterQ);
-  targetQ.multiply(deltaQ); // SLERP factor: 0 is pure gyro, 1 is pure accel.
-
-  this.filterQ.slerp(targetQ, 1 - this.kFilter);
-  this.previousFilterQ.copy(this.filterQ);
-};
-
-__proto$2.getOrientation = function () {
-  return this.filterQ;
-};
-
-__proto$2.accelToQuaternion_ = function (accel) {
-  var normAccel = new mathUtil.Vector3();
-  normAccel.copy(accel);
-  normAccel.normalize();
-  var quat = new mathUtil.Quaternion();
-  quat.setFromUnitVectors(new mathUtil.Vector3(0, 0, -1), normAccel);
-  quat.inverse();
-  return quat;
-};
-
-__proto$2.gyroToQuaternionDelta_ = function (gyro, dt) {
-  // Extract axis and angle from the gyroscope data.
-  var quat = new mathUtil.Quaternion();
-  var axis = new mathUtil.Vector3();
-  axis.copy(gyro);
-  axis.normalize();
-  quat.setFromAxisAngle(axis, gyro.length() * dt);
-  return quat;
-};
-
-var complementaryFilter = ComplementaryFilter;
-
-complementaryFilter.prototype.run_ = function () {
-  if (!this.isOrientationInitialized) {
-    this.accelQ = this.accelToQuaternion_(this.currentAccelMeasurement.sample);
-    this.previousFilterQ.copy(this.accelQ);
-    this.isOrientationInitialized = true;
-    return;
-  }
-
-  var deltaT = this.currentGyroMeasurement.timestampS - this.previousGyroMeasurement.timestampS; // Convert gyro rotation vector to a quaternion delta.
-
-  var gyroDeltaQ = this.gyroToQuaternionDelta_(this.currentGyroMeasurement.sample, deltaT);
-  this.gyroIntegralQ.multiply(gyroDeltaQ); // filter_1 = K * (filter_0 + gyro * dT) + (1 - K) * accel.
-
-  this.filterQ.copy(this.previousFilterQ);
-  this.filterQ.multiply(gyroDeltaQ); // Calculate the delta between the current estimated gravity and the real
-  // gravity vector from accelerometer.
-
-  var invFilterQ = new mathUtil.Quaternion();
-  invFilterQ.copy(this.filterQ);
-  invFilterQ.inverse();
-  this.estimatedGravity.set(0, 0, -1);
-  this.estimatedGravity.applyQuaternion(invFilterQ);
-  this.estimatedGravity.normalize();
-  this.measuredGravity.copy(this.currentAccelMeasurement.sample);
-  this.measuredGravity.normalize(); // Compare estimated gravity with measured gravity, get the delta quaternion
-  // between the two.
-
-  var deltaQ = new mathUtil.Quaternion();
+  var deltaQ = new MathUtil.Quaternion();
   deltaQ.setFromUnitVectors(this.estimatedGravity, this.measuredGravity);
   deltaQ.inverse(); // Calculate the SLERP target: current orientation plus the measured-estimated
   // quaternion delta.
 
-  var targetQ = new mathUtil.Quaternion();
+  var targetQ = new MathUtil.Quaternion();
   targetQ.copy(this.filterQ);
   targetQ.multiply(deltaQ); // SLERP factor: 0 is pure gyro, 1 is pure accel.
 
@@ -1585,7 +1696,7 @@ complementaryFilter.prototype.run_ = function () {
   }
 };
 
-complementaryFilter.prototype.getOrientation = function () {
+ComplementaryFilter.prototype.getOrientation = function () {
   if (this.isFilterQuaternionInitialized) {
     return this.filterQ;
   } else {
@@ -1605,14 +1716,14 @@ function (_super) {
     var _this = _super.call(this) || this;
 
     _this.deviceMotion = new DeviceMotion();
-    _this.accelerometer = new mathUtil.Vector3();
-    _this.gyroscope = new mathUtil.Vector3();
+    _this.accelerometer = new MathUtil.Vector3();
+    _this.gyroscope = new MathUtil.Vector3();
     _this._onDeviceMotionChange = _this._onDeviceMotionChange.bind(_this);
     _this._onScreenOrientationChange = _this._onScreenOrientationChange.bind(_this);
-    _this.filter = new complementaryFilter(K_FILTER);
-    _this.posePredictor = new posePredictor(PREDICTION_TIME_S);
-    _this.filterToWorldQ = new mathUtil.Quaternion();
-    _this.isFirefoxAndroid = util$1.isFirefoxAndroid(); // This includes iPhone & iPad(both desktop and mobile mode) ref #326
+    _this.filter = new ComplementaryFilter(K_FILTER);
+    _this.posePredictor = new PosePredictor(PREDICTION_TIME_S);
+    _this.filterToWorldQ = new MathUtil.Quaternion();
+    _this.isFirefoxAndroid = Util.isFirefoxAndroid(); // This includes iPhone & iPad(both desktop and mobile mode) ref #326
 
     _this.isIOS = IS_IOS || IS_SAFARI_ON_DESKTOP; // Ref https://github.com/immersive-web/cardboard-vr-display/issues/18
 
@@ -1620,26 +1731,26 @@ function (_super) {
     _this._isEnabled = false; // Set the filter to world transform, depending on OS.
 
     if (_this.isIOS) {
-      _this.filterToWorldQ.setFromAxisAngle(new mathUtil.Vector3(1, 0, 0), Math.PI / 2);
+      _this.filterToWorldQ.setFromAxisAngle(new MathUtil.Vector3(1, 0, 0), Math.PI / 2);
     } else {
-      _this.filterToWorldQ.setFromAxisAngle(new mathUtil.Vector3(1, 0, 0), -Math.PI / 2);
+      _this.filterToWorldQ.setFromAxisAngle(new MathUtil.Vector3(1, 0, 0), -Math.PI / 2);
     }
 
-    _this.inverseWorldToScreenQ = new mathUtil.Quaternion();
-    _this.worldToScreenQ = new mathUtil.Quaternion();
-    _this.originalPoseAdjustQ = new mathUtil.Quaternion();
+    _this.inverseWorldToScreenQ = new MathUtil.Quaternion();
+    _this.worldToScreenQ = new MathUtil.Quaternion();
+    _this.originalPoseAdjustQ = new MathUtil.Quaternion();
 
-    _this.originalPoseAdjustQ.setFromAxisAngle(new mathUtil.Vector3(0, 0, 1), -win.orientation * Math.PI / 180);
+    _this.originalPoseAdjustQ.setFromAxisAngle(new MathUtil.Vector3(0, 0, 1), -win.orientation * Math.PI / 180);
 
     _this._setScreenTransform(); // Adjust this filter for being in landscape mode.
 
 
-    if (util$1.isLandscapeMode()) {
+    if (Util.isLandscapeMode()) {
       _this.filterToWorldQ.multiply(_this.inverseWorldToScreenQ);
     } // Keep track of a reset transform for resetSensor.
 
 
-    _this.resetQ = new mathUtil.Quaternion();
+    _this.resetQ = new MathUtil.Quaternion();
 
     _this.deviceMotion.on("devicemotion", _this._onDeviceMotionChange);
 
@@ -1686,20 +1797,20 @@ function (_super) {
 
     if (this.deviceMotion.isWithoutDeviceMotion && this._deviceOrientationQ) {
       this.deviceOrientationFixQ = this.deviceOrientationFixQ || function () {
-        var y = new mathUtil.Quaternion().setFromAxisAngle(new mathUtil.Vector3(0, 1, 0), -_this._alpha);
+        var y = new MathUtil.Quaternion().setFromAxisAngle(new MathUtil.Vector3(0, 1, 0), -_this._alpha);
         return y;
       }();
 
       orientation = this._deviceOrientationQ;
-      var out = new mathUtil.Quaternion();
+      var out = new MathUtil.Quaternion();
       out.copy(orientation);
       out.multiply(this.filterToWorldQ);
       out.multiply(this.resetQ);
       out.multiply(this.worldToScreenQ);
       out.multiplyQuaternions(this.deviceOrientationFixQ, out); // return quaternion as glmatrix quaternion object
 
-      var out_ = quat.fromValues(out.x, out.y, out.z, out.w);
-      return quat.normalize(out_, out_);
+      var outQuat = quat.fromValues(out.x, out.y, out.z, out.w);
+      return quat.normalize(outQuat, outQuat);
     } else {
       // Convert from filter space to the the same system used by the
       // deviceorientation event.
@@ -1712,8 +1823,8 @@ function (_super) {
       var out = this._convertFusionToPredicted(orientation); // return quaternion as glmatrix quaternion object
 
 
-      var out_ = quat.fromValues(out.x, out.y, out.z, out.w);
-      return quat.normalize(out_, out_);
+      var outQuat = quat.fromValues(out.x, out.y, out.z, out.w);
+      return quat.normalize(outQuat, outQuat);
     }
   };
 
@@ -1733,16 +1844,16 @@ function (_super) {
       return;
     }
 
-    this.trigger("change", {
+    this.trigger(new ComponentEvent("change", {
       quaternion: orientation
-    });
+    }));
   };
 
   __proto._convertFusionToPredicted = function (orientation) {
     // Predict orientation.
     this.predictedQ = this.posePredictor.getPrediction(orientation, this.gyroscope, this.previousTimestampS); // Convert to THREE coordinate system: -Z forward, Y up, X right.
 
-    var out = new mathUtil.Quaternion();
+    var out = new MathUtil.Quaternion();
     out.copy(this.filterToWorldQ);
     out.multiply(this.resetQ);
     out.multiply(this.predictedQ);
@@ -1763,7 +1874,7 @@ function (_super) {
         this._alpha = deviceorientation.alpha;
       }
 
-      this._deviceOrientationQ = this._deviceOrientationQ || new mathUtil.Quaternion();
+      this._deviceOrientationQ = this._deviceOrientationQ || new MathUtil.Quaternion();
 
       this._deviceOrientationQ.setFromEulerYXZ(deviceorientation.beta, deviceorientation.alpha, deviceorientation.gamma);
 
@@ -1806,7 +1917,7 @@ function (_super) {
       case 90:
       case -90:
       case 180:
-        this.worldToScreenQ.setFromAxisAngle(new mathUtil.Vector3(0, 0, 1), orientation / -180 * Math.PI);
+        this.worldToScreenQ.setFromAxisAngle(new MathUtil.Vector3(0, 0, 1), orientation / -180 * Math.PI);
         break;
     }
 
@@ -1817,16 +1928,17 @@ function (_super) {
   return FusionPoseSensor;
 }(Component);
 
-function getDeltaYaw(prvQ, curQ) {
+var getDeltaYaw = function (prvQ, curQ) {
   var yawDeltaByYaw = util.getRotationDelta(prvQ, curQ, ROTATE_CONSTANT.YAW_DELTA_BY_YAW);
   var yawDeltaByRoll = util.getRotationDelta(prvQ, curQ, ROTATE_CONSTANT.YAW_DELTA_BY_ROLL) * Math.sin(util.extractPitchFromQuat(curQ));
   return yawDeltaByRoll + yawDeltaByYaw;
-}
+};
 
-function getDeltaPitch(prvQ, curQ) {
+var getDeltaPitch = function (prvQ, curQ) {
   var pitchDelta = util.getRotationDelta(prvQ, curQ, ROTATE_CONSTANT.PITCH_DELTA);
   return pitchDelta;
-}
+}; // eslint-disable-next-line @typescript-eslint/ban-types
+
 
 var TiltMotionInput =
 /*#__PURE__*/
@@ -1983,7 +2095,7 @@ function () {
     this._spinR = Math.atan2(Math.cos(betaR) * Math.sin(gammaR), Math.sin(betaR));
   };
 
-  __proto._onOrientationChange = function (e) {
+  __proto._onOrientationChange = function () {
     if (win.screen && win.screen.orientation && win.screen.orientation.angle !== undefined) {
       this._screenOrientationAngle = screen.orientation.angle;
     } else if (win.orientation !== undefined) {
@@ -2012,7 +2124,6 @@ function (_super) {
   __extends(RotationPanInput, _super);
   /**
    * Constructor
-   *
    * @private
    * @param {HTMLElement} el target element
    * @param {Object} [options] The option object
@@ -2071,7 +2182,8 @@ function (_super) {
     }
 
     _super.prototype.destroy.call(this);
-  };
+  }; // eslint-disable-next-line @typescript-eslint/naming-convention
+
 
   __proto.getOffset = function (properties, useDirection) {
     if (this._useRotation === false) {
@@ -2131,9 +2243,9 @@ function (_super) {
     _this._fusionPoseSensor.on("change", function (e) {
       _this._quaternion = e.quaternion;
 
-      _this.trigger("change", {
+      _this.trigger(new ComponentEvent("change", {
         isTrusted: true
-      });
+      }));
     });
 
     return _this;
@@ -2165,14 +2277,11 @@ function (_super) {
   return DeviceQuaternion;
 }(Component);
 
-var VERSION = "3.4.3-snapshot";
-
 var DEFAULT_YAW_RANGE = [-YAW_RANGE_HALF, YAW_RANGE_HALF];
 var DEFAULT_PITCH_RANGE = [-PITCH_RANGE_HALF, PITCH_RANGE_HALF];
 var CIRCULAR_PITCH_RANGE = [-CIRCULAR_PITCH_RANGE_HALF, CIRCULAR_PITCH_RANGE_HALF];
 /**
  * A module used to provide coordinate based on yaw/pitch orientation. This module receives user touch action, keyboard, mouse and device orientation(if it exists) as input, then combines them and converts it to yaw/pitch coordinates.
- *
  * @alias eg.YawPitchControl
  * @extends eg.Component
  *
@@ -2204,6 +2313,8 @@ function (_super) {
   function YawPitchControl(options) {
     var _this = _super.call(this) || this;
 
+    _this.options = {};
+
     var opt = __assign({
       element: null,
       yaw: 0,
@@ -2218,6 +2329,8 @@ function (_super) {
       pitchRange: DEFAULT_PITCH_RANGE,
       fovRange: [30, 110],
       aspectRatio: 1
+      /* TODO: Need Mandatory? */
+
     }, options);
 
     _this._element = opt.element;
@@ -2248,11 +2361,12 @@ function (_super) {
       param = {};
     }
 
-    var fov = this.axes.get().fov;
+    var fov = this._axes.get().fov;
+
     var areaHeight = param.height || parseInt(window.getComputedStyle(this._element).height, 10);
     var scale = MC_BIND_SCALE[0] * fov / this._initialFov * PAN_SCALE / areaHeight;
-    this.axesPanInput.options.scale = [scale, scale];
-    this.axes.options.deceleration = MC_DECELERATION * fov / MAX_FIELD_OF_VIEW;
+    this._axesPanInput.options.scale = [scale, scale];
+    this._axes.options.deceleration = MC_DECELERATION * fov / MAX_FIELD_OF_VIEW;
     return this;
   };
   /*
@@ -2293,7 +2407,6 @@ function (_super) {
   };
   /**
    * Enable YawPitch functionality
-   *
    * @method eg.YawPitch#enable
    */
 
@@ -2313,7 +2426,6 @@ function (_super) {
   };
   /**
    * Disable YawPitch functionality
-   *
    * @method eg.YawPitch#disable
    */
 
@@ -2332,13 +2444,13 @@ function (_super) {
       this._resetOrientation();
     }
 
-    this.axes.disconnect();
+    this._axes.disconnect();
+
     this._enabled = false;
     return this;
   };
   /**
    * Set one or more of yaw, pitch, fov
-   *
    * @param {Object} coordinate yaw, pitch, fov
    * @param {Number} duration Animation duration. if it is above 0 then it's animated.
    */
@@ -2348,13 +2460,16 @@ function (_super) {
     var yaw = _a.yaw,
         pitch = _a.pitch,
         fov = _a.fov;
-    var pos = this.axes.get();
+
+    var pos = this._axes.get();
+
     var y = yaw === undefined ? 0 : yaw - pos.yaw;
     var p = pitch === undefined ? 0 : pitch - pos.pitch;
     var f = fov === undefined ? 0 : fov - pos.fov; // Allow duration of animation to have more than MC_MAXIMUM_DURATION.
 
-    this.axes.options.maximumDuration = Infinity;
-    this.axes.setBy({
+    this._axes.options.maximumDuration = Infinity;
+
+    this._axes.setBy({
       yaw: y,
       pitch: p,
       fov: f
@@ -2362,7 +2477,8 @@ function (_super) {
   };
 
   __proto.getYawPitch = function () {
-    var yawPitch = this.axes.get();
+    var yawPitch = this._axes.get();
+
     return {
       yaw: yawPitch.yaw,
       pitch: yawPitch.pitch
@@ -2370,11 +2486,12 @@ function (_super) {
   };
 
   __proto.getFov = function () {
-    return this.axes.get().fov;
+    return this._axes.get().fov;
   };
 
   __proto.getQuaternion = function () {
-    var pos = this.axes.get();
+    var pos = this._axes.get();
+
     return this._deviceQuaternion.getCombinedQuaternion(pos.yaw);
   };
 
@@ -2387,14 +2504,15 @@ function (_super) {
 
 
   __proto.destroy = function () {
-    /* tslint:disable no-unused-expression */
-    this.axes && this.axes.destroy();
-    this.axesPanInput && this.axesPanInput.destroy();
-    this.axesWheelInput && this.axesWheelInput.destroy();
-    this.axesTiltMotionInput && this.axesTiltMotionInput.destroy();
-    this.axesPinchInput && this.axesPinchInput.destroy();
-    this.axesMoveKeyInput && this.axesMoveKeyInput.destroy();
+    /* eslint-disable @typescript-eslint/no-unused-expressions */
+    this._axes && this._axes.destroy();
+    this._axesPanInput && this._axesPanInput.destroy();
+    this._axesWheelInput && this._axesWheelInput.destroy();
+    this._axesTiltMotionInput && this._axesTiltMotionInput.destroy();
+    this._axesPinchInput && this._axesPinchInput.destroy();
+    this._axesMoveKeyInput && this._axesMoveKeyInput.destroy();
     this._deviceQuaternion && this._deviceQuaternion.destroy();
+    /* eslint-enable @typescript-eslint/no-unused-expressions */
   };
 
   __proto._initAxes = function (opt) {
@@ -2405,20 +2523,20 @@ function (_super) {
     var pRange = this._updatePitchRange(opt.pitchRange, opt.fov, opt.showPolePoint);
 
     var useRotation = opt.gyroMode === GYRO_MODE.VR;
-    this.axesPanInput = new RotationPanInput(this._element, {
+    this._axesPanInput = new RotationPanInput(this._element, {
       useRotation: useRotation
     });
-    this.axesWheelInput = new WheelInput(this._element, {
+    this._axesWheelInput = new WheelInput(this._element, {
       scale: -4
     });
-    this.axesTiltMotionInput = null;
-    this.axesPinchInput = SUPPORT_TOUCH ? new PinchInput(this._element, {
+    this._axesTiltMotionInput = null;
+    this._axesPinchInput = SUPPORT_TOUCH ? new PinchInput(this._element, {
       scale: -1
     }) : null;
-    this.axesMoveKeyInput = new MoveKeyInput(this._element, {
+    this._axesMoveKeyInput = new MoveKeyInput(this._element, {
       scale: [-6, 6]
     });
-    this.axes = new Axes({
+    this._axes = new Axes({
       yaw: {
         range: yRange,
         circular: this._isCircular(yRange),
@@ -2445,11 +2563,11 @@ function (_super) {
       // TODO: change event type after Axes event type inference update
       hold: function (evt) {
         // Restore maximumDuration not to be spin too mush.
-        _this.axes.options.maximumDuration = MC_MAXIMUM_DURATION;
+        _this._axes.options.maximumDuration = MC_MAXIMUM_DURATION;
 
-        _this.trigger("hold", {
+        _this.trigger(new ComponentEvent("hold", {
           isTrusted: evt.isTrusted
-        });
+        }));
       },
       change: function (evt) {
         if (evt.delta.fov !== 0) {
@@ -2464,9 +2582,9 @@ function (_super) {
         _this._triggerChange(evt);
       },
       animationEnd: function (evt) {
-        _this.trigger("animationEnd", {
+        _this.trigger(new ComponentEvent("animationEnd", {
           isTrusted: evt.isTrusted
-        });
+        }));
       }
     });
   };
@@ -2503,7 +2621,7 @@ function (_super) {
 
   __proto._applyOptions = function (keys) {
     var options = this.options;
-    var axes = this.axes;
+    var axes = this._axes;
     var isVR = options.gyroMode === GYRO_MODE.VR;
     var isYawPitch = options.gyroMode === GYRO_MODE.YAWPITCH; // If it's VR mode, restrict user interaction to yaw direction only
 
@@ -2552,10 +2670,12 @@ function (_super) {
       return key === "gyroMode";
     }) && SUPPORT_DEVICEMOTION) {
       // Disconnect first
-      if (this.axesTiltMotionInput) {
-        this.axes.disconnect(this.axesTiltMotionInput);
-        this.axesTiltMotionInput.destroy();
-        this.axesTiltMotionInput = null;
+      if (this._axesTiltMotionInput) {
+        this._axes.disconnect(this._axesTiltMotionInput);
+
+        this._axesTiltMotionInput.destroy();
+
+        this._axesTiltMotionInput = null;
       }
 
       if (this._deviceQuaternion) {
@@ -2567,11 +2687,12 @@ function (_super) {
       if (isVR) {
         this._initDeviceQuaternion();
       } else if (isYawPitch) {
-        this.axesTiltMotionInput = new TiltMotionInput(this._element);
-        this.axes.connect(["yaw", "pitch"], this.axesTiltMotionInput);
+        this._axesTiltMotionInput = new TiltMotionInput(this._element);
+
+        this._axes.connect(["yaw", "pitch"], this._axesTiltMotionInput);
       }
 
-      this.axesPanInput.setUseRotation(isVR);
+      this._axesPanInput.setUseRotation(isVR);
     }
 
     if (keys.some(function (key) {
@@ -2580,9 +2701,9 @@ function (_super) {
       var useKeyboard = options.useKeyboard;
 
       if (useKeyboard) {
-        axes.connect(["yaw", "pitch"], this.axesMoveKeyInput);
+        axes.connect(["yaw", "pitch"], this._axesMoveKeyInput);
       } else {
-        axes.disconnect(this.axesMoveKeyInput);
+        axes.disconnect(this._axesMoveKeyInput);
       }
     }
 
@@ -2591,10 +2712,10 @@ function (_super) {
     })) {
       var useZoom = options.useZoom; // Disconnect first
 
-      axes.disconnect(this.axesWheelInput);
+      axes.disconnect(this._axesWheelInput);
 
       if (useZoom) {
-        axes.connect(["fov"], this.axesWheelInput);
+        axes.connect(["fov"], this._axesWheelInput);
       }
     }
 
@@ -2608,26 +2729,28 @@ function (_super) {
   };
 
   __proto._togglePinchInputByOption = function (touchDirection, useZoom) {
-    if (this.axesPinchInput) {
+    if (this._axesPinchInput) {
       // disconnect first
-      this.axes.disconnect(this.axesPinchInput); // If the touchDirection option is not ALL, pinchInput should be disconnected to make use of a native scroll.
+      this._axes.disconnect(this._axesPinchInput); // If the touchDirection option is not ALL, pinchInput should be disconnected to make use of a native scroll.
+
 
       if (useZoom && touchDirection === TOUCH_DIRECTION_ALL && // TODO: Get rid of using private property of axes instance.
-      this.axes._inputs.indexOf(this.axesPinchInput) === -1) {
-        this.axes.connect(["fov"], this.axesPinchInput);
+      this._axes._inputs.indexOf(this._axesPinchInput) === -1) {
+        this._axes.connect(["fov"], this._axesPinchInput);
       }
     }
   };
 
   __proto._enableTouch = function (direction) {
     // Disconnect first
-    if (this.axesPanInput) {
-      this.axes.disconnect(this.axesPanInput);
+    if (this._axesPanInput) {
+      this._axes.disconnect(this._axesPanInput);
     }
 
     var yawEnabled = direction & TOUCH_DIRECTION_YAW ? "yaw" : null;
     var pitchEnabled = direction & TOUCH_DIRECTION_PITCH ? "pitch" : null;
-    this.axes.connect([yawEnabled, pitchEnabled], this.axesPanInput);
+
+    this._axes.connect([yawEnabled, pitchEnabled], this._axesPanInput);
   };
 
   __proto._initDeviceQuaternion = function () {
@@ -2643,7 +2766,8 @@ function (_super) {
   __proto._getValidYawRange = function (newYawRange, newFov, newAspectRatio) {
     var ratio = this._adjustAspectRatio(newAspectRatio || this.options.aspectRatio || 1);
 
-    var fov = newFov || this.axes.get().fov;
+    var fov = newFov || this._axes.get().fov;
+
     var horizontalFov = fov * ratio;
     var isValid = newYawRange[1] - newYawRange[0] >= horizontalFov;
 
@@ -2655,7 +2779,8 @@ function (_super) {
   };
 
   __proto._getValidPitchRange = function (newPitchRange, newFov) {
-    var fov = newFov || this.axes.get().fov;
+    var fov = newFov || this._axes.get().fov;
+
     var isValid = newPitchRange[1] - newPitchRange[0] >= fov;
 
     if (isValid) {
@@ -2683,20 +2808,22 @@ function (_super) {
 
   __proto._updateControlScale = function (changeEvt) {
     var opt = this.options;
-    var fov = this.axes.get().fov;
+
+    var fov = this._axes.get().fov;
 
     var pRange = this._updatePitchRange(opt.pitchRange, fov, opt.showPolePoint);
 
     var yRange = this._updateYawRange(opt.yawRange, fov, opt.aspectRatio); // TODO: If not changed!?
 
 
-    var pos = this.axes.get();
+    var pos = this._axes.get();
+
     var y = pos.yaw;
     var p = pos.pitch;
-    vec2.copy(this.axes.axis.yaw.range, yRange);
-    vec2.copy(this.axes.axis.pitch.range, pRange);
-    this.axes.axis.yaw.circular = this._isCircular(yRange);
-    this.axes.axis.pitch.circular = this._isCircular(pRange);
+    vec2.copy(this._axes.axis.yaw.range, yRange);
+    vec2.copy(this._axes.axis.pitch.range, pRange);
+    this._axes.axis.yaw.circular = this._isCircular(yRange);
+    this._axes.axis.pitch.circular = this._isCircular(pRange);
     /**
      * update yaw/pitch by it's range.
      */
@@ -2720,10 +2847,11 @@ function (_super) {
       });
     }
 
-    this.axes.setTo({
+    this._axes.setTo({
       yaw: y,
       pitch: p
     }, 0);
+
     return this;
   };
 
@@ -2773,7 +2901,8 @@ function (_super) {
 
 
   __proto._triggerChange = function (evt) {
-    var pos = this.axes.get();
+    var pos = this._axes.get();
+
     var opt = this.options;
     var event = {
       targetElement: opt.element,
@@ -2788,7 +2917,7 @@ function (_super) {
       event.quaternion = this._deviceQuaternion.getCombinedQuaternion(pos.yaw);
     }
 
-    this.trigger("change", event);
+    this.trigger(new ComponentEvent("change", event));
   }; // TODO: makes constant to be logic
 
 
@@ -2826,11 +2955,13 @@ function (_super) {
 
   __proto._resetOrientation = function () {
     var opt = this.options;
-    this.axes.setTo({
+
+    this._axes.setTo({
       yaw: opt.yaw,
       pitch: opt.pitch,
       fov: opt.fov
     }, 0);
+
     return this;
   };
 
@@ -2845,6 +2976,365 @@ function (_super) {
   return YawPitchControl;
 }(Component);
 
+/**
+ * Constant value for errors
+ * @ko 에러에 대한 상수 값
+ * @namespace
+ * @name ERROR_TYPE
+ * @memberof eg.view360.PanoViewer
+ */
+
+var ERROR_TYPE = {
+  /**
+   * Unsupported device
+   * @ko 미지원 기기
+   * @name INVALID_DEVICE
+   * @memberof eg.view360.PanoViewer.ERROR_TYPE
+   * @constant
+   * @type {Number}
+   * @default 10
+   */
+  INVALID_DEVICE: 10,
+
+  /**
+   * Webgl not support
+   * @ko WEBGL 미지원
+   * @name NO_WEBGL
+   * @memberof eg.view360.PanoViewer.ERROR_TYPE
+   * @constant
+   * @type {Number}
+   * @default 11
+   */
+  NO_WEBGL: 11,
+
+  /**
+   * Failed to load image
+   * @ko 이미지 로드 실패
+   * @name FAIL_IMAGE_LOAD
+   * @memberof eg.view360.PanoViewer.ERROR_TYPE
+   * @constant
+   * @type {Number}
+   * @default 12
+   */
+  FAIL_IMAGE_LOAD: 12,
+
+  /**
+   * Failed to bind texture
+   * @ko 텍스쳐 바인딩 실패
+   * @name FAIL_BIND_TEXTURE
+   * @memberof eg.view360.PanoViewer.ERROR_TYPE
+   * @constant
+   * @type {Number}
+   * @default 13
+   */
+  FAIL_BIND_TEXTURE: 13,
+
+  /**
+   * Only one resource(image or video) should be specified
+   * @ko 리소스 지정 오류 (image 혹은 video 중 하나만 지정되어야 함)
+   * @name INVALID_RESOURCE
+   * @memberof eg.view360.PanoViewer.ERROR_TYPE
+   * @constant
+   * @type {Number}
+   * @default 14
+   */
+  INVALID_RESOURCE: 14,
+
+  /**
+   * WebGL context lost occurred
+   * @ko WebGL context lost 발생
+   * @name RENDERING_CONTEXT_LOST
+   * @memberof eg.view360.PanoViewer.ERROR_TYPE
+   * @constant
+   * @type {Number}
+   * @default 15
+   */
+  RENDERING_CONTEXT_LOST: 15
+};
+/**
+ * Constant value for events
+ * @ko 이벤트에 대한 상수 값
+ * @namespace
+ * @name EVENTS
+ * @memberof eg.view360.PanoViewer
+ */
+
+var PANOVIEWER_EVENTS = {
+  /**
+   * Events that is fired when PanoViewer is ready to show image and handle user interaction.
+   * @ko PanoViewer 가 사용자의 인터렉션 및 렌더링이 준비되상태에 발생하는 이벤트
+   * @name READY
+   * @memberof eg.view360.PanoViewer.EVENTS
+   * @constant
+   * @type {String}
+   * @default ready
+   */
+  READY: "ready",
+
+  /**
+   * Events that is fired when direction or fov is changed.
+   * @ko PanoViewer 에서 바라보고 있는 방향이나 FOV(화각)가 변경되었을때 발생하는 이벤트
+   * @name VIEW_CHANGE
+   * @memberof eg.view360.PanoViewer.EVENTS
+   * @constant
+   * @type {String}
+   * @default viewChange
+   */
+  VIEW_CHANGE: "viewChange",
+
+  /**
+   * Events that is fired when animation which is triggered by inertia is ended.
+   * @ko 관성에 의한 애니메이션 동작이 완료되었을때 발생하는 이벤트
+   * @name ANIMATION_END
+   * @memberof eg.view360.PanoViewer.EVENTS
+   * @constant
+   * @type {String}
+   * @default animationEnd
+   */
+  ANIMATION_END: "animationEnd",
+
+  /**
+   * Events that is fired when error occurs
+   * @ko 에러 발생 시 발생하는 이벤트
+   * @name ERROR
+   * @memberof eg.view360.PanoViewer.EVENTS
+   * @constant
+   * @type {String}
+   * @default error
+   */
+  ERROR: "error"
+};
+/**
+ * Constant value for projection type
+ * @ko 프로젝션 타입 대한 상수 값
+ * @namespace
+ * @name PROJECTION_TYPE
+ * @memberof eg.view360.PanoViewer
+ */
+
+var PROJECTION_TYPE = {
+  /**
+   * Constant value for equirectangular type.
+   * @ko equirectangular 에 대한 상수 값.
+   * @name EQUIRECTANGULAR
+   * @memberof eg.view360.PanoViewer.PROJECTION_TYPE
+   * @constant
+   * @type {String}
+   * @default equirectangular
+   */
+  EQUIRECTANGULAR: "equirectangular",
+
+  /**
+   * Constant value for cubemap type.
+   * @ko cubemap 에 대한 상수 값.
+   * @name CUBEMAP
+   * @memberof eg.view360.PanoViewer.PROJECTION_TYPE
+   * @constant
+   * @type {String}
+   * @default cubemap
+   */
+  CUBEMAP: "cubemap",
+
+  /**
+   * Constant value for cubestrip type.
+   * Cubestrip is a format for a single image with a combination of six cube faces. It is almost identical to cubemap, but it is implemented in a different way. It aims at better performance and efficiency. In addition, it automatically detects and supports EAC.
+   * @ko cubemap 에 대한 상수 값.Cubestrip 은 cube 면이 6개가 조합된 조합을 한장의 이미지를 위한 포맷이다. cubemap 과 사용방법이 거의 동일하지만 다른 방식으로 구현되었다. 보다 좋은 성능과 효율성을 목적으로 한다. 더불어 자동으로 EAC 를 감지하고 지원한다.
+   * @name CUBESTRIP
+   * @memberof eg.view360.PanoViewer.PROJECTION_TYPE
+   * @constant
+   * @type {String}
+   * @default cubestrip
+   */
+  CUBESTRIP: "cubestrip",
+
+  /**
+   * Constant value for PANORAMA type.
+   *
+   * PANORAMA is a format for a panorma image which is taken from smartphone.
+   * @ko PANORAMA 에 대한 상수값. 파노라마는 스마트 폰에서 가져온 파노라마 이미지의 형식입니다.
+   *
+   * @name PANORAMA
+   * @memberof eg.view360.PanoViewer.PROJECTION_TYPE
+   * @constant
+   * @type {String}
+   * @default panorama
+   */
+  PANORAMA: "panorama",
+
+  /**
+   * Constant value for EQUI_STEREOSCOPY type.
+   *
+   * Constant value for EQUI_STEREOSCOPY. Stereoscopy image format of EQUIRECTANGULAR. It is an experimental function to show a stereoscopic type equirectangular image on a plane. It does not support stereoscopic viewing function through special visual equipment at present.
+   * @ko EQUI_STEREOSCOPY 에 대한 상수값. EQUIRECTANGULAR 의 Stereoscopy 이미지 형식입니다. Stereoscopic 형태의 equirectangular 이미지를 평면에 보여주기 위한 실험적인 기능으로 현재는 특수한 시각 장비를 통한 입체적인 보기 기능은 지원하지 않습니다.
+   *
+   * @name STEREOSCOPIC_EQUI
+   * @memberof eg.view360.PanoViewer.PROJECTION_TYPE
+   * @constant
+   * @type {String}
+   * @default stereoequi
+   */
+  STEREOSCOPIC_EQUI: "stereoequi"
+};
+/**
+ * A constant value for the format of the stereoscopic equirectangular projection type.
+ * @ko Stereoscopic equirectangular 프로젝션 타입의 포맷에 대한 상수 값
+ * @namespace
+ * @name STEREO_FORMAT
+ * @memberof eg.view360.PanoViewer
+ */
+
+var STEREO_FORMAT = {
+  /**
+   * A constant value for format of top bottom stereoscopic 360 equirectangular projection.
+   * @ko top bottom stereoscopic 360 equirectangular projection 콘텐츠 포맷에 대한 상수값.
+   * @name TOP_BOTTOM
+   * @memberof eg.view360.PanoViewer.STEREO_FORMAT
+   * @constant
+   * @type {String}
+   * @default "3dv"
+   */
+  TOP_BOTTOM: "3dv",
+
+  /**
+   * A constant value for format of left right stereoscopic 360 equirectangular projection.
+   * @ko Left right stereoscopic 360 equirectangular projection 콘텐츠 포맷에 대한 상수값.
+   * @name LEFT_RIGHT
+   * @memberof eg.view360.PanoViewer.STEREO_FORMAT
+   * @constant
+   * @type {String}
+   * @default "3dh"
+   */
+  LEFT_RIGHT: "3dh",
+
+  /**
+   * A constant value specifying media is not in stereoscopic format.
+   * @ko Stereoscopic 영상이 아닐 경우에 적용하는 상수값.
+   * @name NONE
+   * @memberof eg.view360.PanoViewer.STEREO_FORMAT
+   * @constant
+   * @type {String}
+   * @default ""
+   */
+  NONE: ""
+}; // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
+var PANOVIEWER_OPTIONS = {
+  image: true,
+  video: true,
+  projectionType: true,
+  cubemapConfig: true,
+  stereoFormat: true,
+  width: true,
+  height: true,
+  yaw: true,
+  pitch: true,
+  fov: true,
+  showPolePoint: true,
+  useZoom: true,
+  useKeyboard: true,
+  gyroMode: true,
+  yawRange: true,
+  pitchRange: true,
+  fovRange: true,
+  touchDirection: true,
+  canvasClass: true
+};
+var DEFAULT_CANVAS_CLASS = "view360-canvas";
+
+var merge = function (target) {
+  var srcs = [];
+
+  for (var _i = 1; _i < arguments.length; _i++) {
+    srcs[_i - 1] = arguments[_i];
+  }
+
+  srcs.forEach(function (source) {
+    Object.keys(source).forEach(function (key) {
+      var value = source[key];
+
+      if (Array.isArray(target[key]) && Array.isArray(value)) {
+        target[key] = __spread(target[key], value);
+      } else {
+        target[key] = value;
+      }
+    });
+  });
+  return target;
+};
+var toImageElement = function (image) {
+  var images = image instanceof Array ? image : [image];
+  var parsedImages = images.map(function (img) {
+    var imgEl = img;
+
+    if (typeof img === "string") {
+      imgEl = new Image();
+      imgEl.crossOrigin = "anonymous";
+      imgEl.src = img;
+    }
+
+    return imgEl;
+  });
+  return parsedImages.length === 1 ? parsedImages[0] : parsedImages;
+};
+var toVideoElement = function (videoCandidate) {
+  if (videoCandidate instanceof HTMLVideoElement) {
+    return videoCandidate;
+  } else {
+    // url
+    var video_1 = document.createElement("video");
+    video_1.setAttribute("crossorigin", "anonymous");
+    video_1.setAttribute("webkit-playsinline", "");
+    video_1.setAttribute("playsinline", "");
+
+    if (videoCandidate instanceof Array) {
+      videoCandidate.forEach(function (v) {
+        return appendSourceElement(video_1, v);
+      });
+    } else {
+      appendSourceElement(video_1, videoCandidate);
+    }
+
+    var sourceCount = video_1.querySelectorAll("source").length;
+
+    if (sourceCount > 0) {
+      if (video_1.readyState < 1) {
+        video_1.load();
+      }
+    }
+
+    return video_1;
+  }
+};
+/**
+ *
+ * @param {Object | String} videoUrl Object or String containing Video Source URL<ko>비디오 URL 정보를 담고 있는 문자열이나 객체 {type, src}</ko>
+ */
+
+var appendSourceElement = function (video, videoUrl) {
+  var videoSrc;
+  var videoType;
+
+  if (typeof videoUrl === "object") {
+    videoSrc = videoUrl.src;
+    videoType = videoUrl.type;
+  } else if (typeof videoUrl === "string") {
+    videoSrc = videoUrl;
+  }
+
+  if (!videoSrc) {
+    return false;
+  }
+
+  var sourceElement = document.createElement("source");
+  sourceElement.src = videoSrc;
+
+  if (videoType) {
+    sourceElement.type = videoType;
+  }
+
+  video.appendChild(sourceElement);
+};
+
 var WEBGL_ERROR_CODE = {
   "0": "NO_ERROR",
   "1280": "INVALID_ENUM",
@@ -2854,7 +3344,7 @@ var WEBGL_ERROR_CODE = {
   "1286": "INVALID_FRAMEBUFFER_OPERATION",
   "37442": "CONTEXT_LOST_WEBGL"
 };
-var webglAvailability = null;
+var webglAvailability = null; // eslint-disable-next-line @typescript-eslint/naming-convention
 
 var WebGLUtils =
 /*#__PURE__*/
@@ -2921,13 +3411,12 @@ function () {
 
     var contextAttributes = __assign({
       preserveDrawingBuffer: true,
-      antialias: false,
-      xrCompatible: true
+      antialias: false
     }, userContextAttributes);
 
-    function onWebglcontextcreationerror(e) {
+    var onWebglcontextcreationerror = function (e) {
       return e.statusMessage;
-    }
+    };
 
     canvas.addEventListener("webglcontextcreationerror", onWebglcontextcreationerror);
 
@@ -2937,7 +3426,7 @@ function () {
 
         try {
           context = canvas.getContext(identifier, contextAttributes);
-        } catch (t) {} // tslint:disable-line no-empty
+        } catch (t) {} // eslint-disable-line no-empty
 
 
         if (context) {
@@ -3211,9 +3700,9 @@ function (_super) {
     console.error("Renderer Error:", error);
     /* eslint-enable no-console */
 
-    this.trigger(EVENTS.ERROR, {
+    this.trigger(new ComponentEvent(EVENTS.ERROR, {
       message: typeof error === "string" ? error : error.message
-    });
+    }));
   };
 
   Renderer.EVENTS = EVENTS;
@@ -3262,7 +3751,11 @@ function (_super) {
     return indexData;
   };
 
-  __proto.getTextureCoordData = function (imageConfig) {
+  __proto.getTextureCoordData = function (_a) {
+    var _this = this;
+
+    var image = _a.image,
+        imageConfig = _a.imageConfig;
     var vertexOrder = "BFUDRL";
     var order = CubeRenderer.extractOrder(imageConfig);
     var base = this.getVertexPositionData();
@@ -3271,17 +3764,18 @@ function (_super) {
 
     var elemSize = 3;
     var vertexPerTile = 4;
-    var textureCoordData = vertexOrder.split("").map(function (face) {
+    var trim = imageConfig.trim;
+    var texCoords = vertexOrder.split("").map(function (face) {
       return tileConfig[order.indexOf(face)];
     }).map(function (config, i) {
       var rotation = Math.floor(config.rotation / 90);
-      var ordermap_ = config.flipHorizontal ? [0, 1, 2, 3] : [1, 0, 3, 2];
+      var ordermap = config.flipHorizontal ? [0, 1, 2, 3] : [1, 0, 3, 2];
 
       for (var r = 0; r < Math.abs(rotation); r++) {
         if (config.flipHorizontal && rotation > 0 || !config.flipHorizontal && rotation < 0) {
-          ordermap_.push(ordermap_.shift());
+          ordermap.push(ordermap.shift());
         } else {
-          ordermap_.unshift(ordermap_.pop());
+          ordermap.unshift(ordermap.pop());
         }
       }
 
@@ -3290,14 +3784,22 @@ function (_super) {
       var tileTemp = [];
 
       for (var j = 0; j < vertexPerTile; j++) {
-        tileTemp[ordermap_[j]] = tileVertex.splice(0, elemSize);
+        tileTemp[ordermap[j]] = tileVertex.splice(0, elemSize);
       }
 
       return tileTemp;
-    }).join().split(",").map(function (v) {
-      return parseInt(v, 10);
-    });
-    return textureCoordData;
+    }).map(function (coord) {
+      return _this._shrinkCoord({
+        image: image,
+        faceCoords: coord,
+        trim: trim
+      });
+    }).reduce(function (acc, val) {
+      return __spread(acc, val.reduce(function (coords, coord) {
+        return __spread(coords, coord);
+      }, []));
+    }, []);
+    return texCoords;
   };
 
   __proto.getVertexShaderSource = function () {
@@ -3379,16 +3881,15 @@ function (_super) {
   __proto.getMaxCubeMapTextureSize = function (gl, image) {
     var agentInfo = agent$1();
     var maxCubeMapTextureSize = gl.getParameter(gl.MAX_CUBE_MAP_TEXTURE_SIZE);
-
-    var _imageWidth = this.getSourceTileSize(image);
+    var imageWidth = this.getSourceTileSize(image);
 
     if (agentInfo.browser.name === "ie" && agentInfo.browser.majorVersion === 11) {
-      if (!util.isPowerOfTwo(_imageWidth)) {
+      if (!util.isPowerOfTwo(imageWidth)) {
         for (var i = 1; i < maxCubeMapTextureSize; i *= 2) {
-          if (i < _imageWidth) {
+          if (i < imageWidth) {
             continue;
           } else {
-            _imageWidth = i;
+            imageWidth = i;
             break;
           }
         }
@@ -3399,17 +3900,40 @@ function (_super) {
       var majorVersion = agentInfo.os.majorVersion; // ios 9 의 경우 텍스쳐 최대사이즈는 1024 이다.
 
       if (majorVersion === 9) {
-        _imageWidth = 1024;
+        imageWidth = 1024;
       } // ios 8 의 경우 텍스쳐 최대사이즈는 512 이다.
 
 
       if (majorVersion === 8) {
-        _imageWidth = 512;
+        imageWidth = 512;
       }
     } // maxCubeMapTextureSize 보다는 작고, imageWidth 보다 큰 2의 승수 중 가장 작은 수
 
 
-    return Math.min(maxCubeMapTextureSize, _imageWidth);
+    return Math.min(maxCubeMapTextureSize, imageWidth);
+  };
+
+  __proto._shrinkCoord = function (coordData) {
+    var image = coordData.image,
+        faceCoords = coordData.faceCoords,
+        trim = coordData.trim;
+    var inputTextureSize = Array.isArray(image) ? this.getDimension(image[0]).width : this.getSourceTileSize(image); // Shrink by "trim" px
+
+    var SHRINK_MULTIPLIER = 1 - trim * (2 / inputTextureSize);
+    var axisMultipliers = [0, 1, 2].map(function (axisIndex) {
+      var axisDir = util.sign(faceCoords[0][axisIndex]);
+      var notSameDir = faceCoords.some(function (coord) {
+        return util.sign(coord[axisIndex]) !== axisDir;
+      });
+      return notSameDir;
+    }).map(function (notSameDir) {
+      return notSameDir ? SHRINK_MULTIPLIER : 1;
+    });
+    return faceCoords.map(function (coords) {
+      return coords.map(function (coord, axisIndex) {
+        return coord * axisMultipliers[axisIndex];
+      });
+    });
   };
 
   CubeRenderer._VERTEX_POSITION_DATA = null;
@@ -3467,12 +3991,16 @@ function (_super) {
     return indices;
   };
 
-  __proto.getTextureCoordData = function (imageConfig) {
-    var _this = this; // TODO: make it cols, rows as config.
+  __proto.getTextureCoordData = function (_a) {
+    var _this = this;
 
+    var image = _a.image,
+        imageConfig = _a.imageConfig; // TODO: make it cols, rows as config.
 
     var cols = 3;
     var rows = 2;
+    var textureSize = this.getDimension(image);
+    var trim = imageConfig.trim;
     var order = imageConfig.order || "RLUDFB";
     var coords = []; // 텍스쳐의 좌표는 윗쪽이 큰 값을 가지므로 row 는 역순으로 넣는다.
 
@@ -3488,7 +4016,7 @@ function (_super) {
 
     coords = coords // shrink coord to avoid pixel bleeding
     .map(function (coord) {
-      return _this._shrinkCoord(coord);
+      return _this._shrinkCoord(coord, textureSize, trim);
     }).map(function (coord, i) {
       return _this._transformCoord(coord, tileConfigs[i]);
     }); // vertices 에서 지정된 순서대로 그대로 그리기 위해 vertex 의 순서를 BFUDRL 로 재배치
@@ -3544,9 +4072,12 @@ function (_super) {
     return newCoord;
   };
 
-  __proto._shrinkCoord = function (coord) {
-    var SHRINK_Y = 0.00;
-    var SHRINK_X = 0.00;
+  __proto._shrinkCoord = function (coord, textureSize, trim) {
+    var width = textureSize.width,
+        height = textureSize.height; // Shrink by "trim" px
+
+    var SHRINK_Y = trim * (1 / height);
+    var SHRINK_X = trim * (1 / width);
     return [coord[0] + SHRINK_X, coord[1] + SHRINK_Y, coord[2] - SHRINK_X, coord[3] + SHRINK_Y, coord[4] - SHRINK_X, coord[5] - SHRINK_Y, coord[6] + SHRINK_X, coord[7] - SHRINK_Y];
   };
 
@@ -3579,258 +4110,6 @@ function (_super) {
 
   return CubeStripRenderer;
 }(Renderer);
-
-/**
- * Constant value for gyro mode. <br>(Reference {@link https://github.com/naver/egjs-view360/wiki/PanoViewer-3.0-User-Guide})
- * @ko gyro 모드 대한 상수 값. <br>({@link https://github.com/naver/egjs-view360/wiki/PanoViewer-3.0-User-Guide} 참고)
- * @namespace
- * @name GYRO_MODE
- * @memberof eg.view360.PanoViewer
- */
-/**
- * Constant value for errors
- * @ko 에러에 대한 상수 값
- * @namespace
- * @name ERROR_TYPE
- * @memberof eg.view360.PanoViewer
- */
-
-var ERROR_TYPE = {
-  /**
-   * Unsupported device
-   * @ko 미지원 기기
-   * @name INVALID_DEVICE
-   * @memberof eg.view360.PanoViewer.ERROR_TYPE
-   * @constant
-   * @type {Number}
-   * @default 10
-   */
-  INVALID_DEVICE: 10,
-
-  /**
-   * Webgl not support
-   * @ko WEBGL 미지원
-   * @name NO_WEBGL
-   * @memberof eg.view360.PanoViewer.ERROR_TYPE
-   * @constant
-   * @type {Number}
-   * @default 11
-   */
-  NO_WEBGL: 11,
-
-  /**
-   * Failed to load image
-   * @ko 이미지 로드 실패
-   * @name FAIL_IMAGE_LOAD
-   * @memberof eg.view360.PanoViewer.ERROR_TYPE
-   * @constant
-   * @type {Number}
-   * @default 12
-   */
-  FAIL_IMAGE_LOAD: 12,
-
-  /**
-   * Failed to bind texture
-   * @ko 텍스쳐 바인딩 실패
-   * @name FAIL_BIND_TEXTURE
-   * @memberof eg.view360.PanoViewer.ERROR_TYPE
-   * @constant
-   * @type {Number}
-   * @default 13
-   */
-  FAIL_BIND_TEXTURE: 13,
-
-  /**
-   * Only one resource(image or video) should be specified
-   * @ko 리소스 지정 오류 (image 혹은 video 중 하나만 지정되어야 함)
-   * @name INVALID_RESOURCE
-   * @memberof eg.view360.PanoViewer.ERROR_TYPE
-   * @constant
-   * @type {Number}
-   * @default 14
-   */
-  INVALID_RESOURCE: 14,
-
-  /**
-   * WebGL context lost occurred
-   * @ko WebGL context lost 발생
-   * @name RENDERING_CONTEXT_LOST
-   * @memberof eg.view360.PanoViewer.ERROR_TYPE
-   * @constant
-   * @type {Number}
-   * @default 15
-   */
-  RENDERING_CONTEXT_LOST: 15
-};
-/**
- * Constant value for events
- * @ko 이벤트에 대한 상수 값
- * @namespace
- * @name EVENTS
- * @memberof eg.view360.PanoViewer
- */
-
-var EVENTS$1 = {
-  /**
-   * Events that is fired when PanoViewer is ready to show image and handle user interaction.
-   * @ko PanoViewer 가 사용자의 인터렉션 및 렌더링이 준비되상태에 발생하는 이벤트
-   * @name READY
-   * @memberof eg.view360.PanoViewer.EVENTS
-   * @constant
-   * @type {String}
-   * @default ready
-   */
-  READY: "ready",
-
-  /**
-   * Events that is fired when direction or fov is changed.
-   * @ko PanoViewer 에서 바라보고 있는 방향이나 FOV(화각)가 변경되었을때 발생하는 이벤트
-   * @name VIEW_CHANGE
-   * @memberof eg.view360.PanoViewer.EVENTS
-   * @constant
-   * @type {String}
-   * @default viewChange
-   */
-  VIEW_CHANGE: "viewChange",
-
-  /**
-   * Events that is fired when animation which is triggered by inertia is ended.
-   * @ko 관성에 의한 애니메이션 동작이 완료되었을때 발생하는 이벤트
-   * @name ANIMATION_END
-   * @memberof eg.view360.PanoViewer.EVENTS
-   * @constant
-   * @type {String}
-   * @default animationEnd
-   */
-  ANIMATION_END: "animationEnd",
-
-  /**
-   * Events that is fired when error occurs
-   * @ko 에러 발생 시 발생하는 이벤트
-   * @name ERROR
-   * @memberof eg.view360.PanoViewer.EVENTS
-   * @constant
-   * @type {String}
-   * @default error
-   */
-  ERROR: "error"
-};
-/**
- * Constant value for projection type
- * @ko 프로젝션 타입 대한 상수 값
- * @namespace
- * @name PROJECTION_TYPE
- * @memberof eg.view360.PanoViewer
- */
-
-var PROJECTION_TYPE = {
-  /**
-   * Constant value for equirectangular type.
-   * @ko equirectangular 에 대한 상수 값.
-   * @name EQUIRECTANGULAR
-   * @memberof eg.view360.PanoViewer.PROJECTION_TYPE
-   * @constant
-   * @type {String}
-   * @default equirectangular
-   */
-  EQUIRECTANGULAR: "equirectangular",
-
-  /**
-   * Constant value for cubemap type.
-   * @ko cubemap 에 대한 상수 값.
-   * @name CUBEMAP
-   * @memberof eg.view360.PanoViewer.PROJECTION_TYPE
-   * @constant
-   * @type {String}
-   * @default cubemap
-   */
-  CUBEMAP: "cubemap",
-
-  /**
-   * Constant value for cubestrip type.
-   * Cubestrip is a format for a single image with a combination of six cube faces. It is almost identical to cubemap, but it is implemented in a different way. It aims at better performance and efficiency. In addition, it automatically detects and supports EAC.
-   *
-   * @ko cubemap 에 대한 상수 값.Cubestrip 은 cube 면이 6개가 조합된 조합을 한장의 이미지를 위한 포맷이다. cubemap 과 사용방법이 거의 동일하지만 다른 방식으로 구현되었다. 보다 좋은 성능과 효율성을 목적으로 한다. 더불어 자동으로 EAC 를 감지하고 지원한다.
-   * @name CUBESTRIP
-   * @memberof eg.view360.PanoViewer.PROJECTION_TYPE
-   * @constant
-   * @type {String}
-   * @default cubestrip
-   */
-  CUBESTRIP: "cubestrip",
-
-  /**
-   * Constant value for PANORAMA type.
-   *
-   * PANORAMA is a format for a panorma image which is taken from smartphone.
-   *
-   * @ko PANORAMA 에 대한 상수값. 파노라마는 스마트 폰에서 가져온 파노라마 이미지의 형식입니다.
-   *
-   * @name PANORAMA
-   * @memberof eg.view360.PanoViewer.PROJECTION_TYPE
-   * @constant
-   * @type {String}
-   * @default panorama
-   */
-  PANORAMA: "panorama",
-
-  /**
-   * Constant value for EQUI_STEREOSCOPY type.
-   *
-   * Constant value for EQUI_STEREOSCOPY. Stereoscopy image format of EQUIRECTANGULAR. It is an experimental function to show a stereoscopic type equirectangular image on a plane. It does not support stereoscopic viewing function through special visual equipment at present.
-   *
-   * @ko EQUI_STEREOSCOPY 에 대한 상수값. EQUIRECTANGULAR 의 Stereoscopy 이미지 형식입니다. Stereoscopic 형태의 equirectangular 이미지를 평면에 보여주기 위한 실험적인 기능으로 현재는 특수한 시각 장비를 통한 입체적인 보기 기능은 지원하지 않습니다.
-   *
-   * @name STEREOSCOPIC_EQUI
-   * @memberof eg.view360.PanoViewer.PROJECTION_TYPE
-   * @constant
-   * @type {String}
-   * @default stereoequi
-   */
-  STEREOSCOPIC_EQUI: "stereoequi"
-};
-/**
- * A constant value for the format of the stereoscopic equirectangular projection type.
- * @ko Stereoscopic equirectangular 프로젝션 타입의 포맷에 대한 상수 값
- * @namespace
- * @name STEREO_FORMAT
- * @memberof eg.view360.PanoViewer
- */
-
-var STEREO_FORMAT = {
-  /**
-   * A constant value for format of top bottom stereoscopic 360 equirectangular projection.
-   * @ko top bottom stereoscopic 360 equirectangular projection 콘텐츠 포맷에 대한 상수값.
-   * @name TOP_BOTTOM
-   * @memberof eg.view360.PanoViewer.STEREO_FORMAT
-   * @constant
-   * @type {String}
-   * @default "3dv"
-   */
-  TOP_BOTTOM: "3dv",
-
-  /**
-   * A constant value for format of left right stereoscopic 360 equirectangular projection.
-   * @ko Left right stereoscopic 360 equirectangular projection 콘텐츠 포맷에 대한 상수값.
-   * @name LEFT_RIGHT
-   * @memberof eg.view360.PanoViewer.STEREO_FORMAT
-   * @constant
-   * @type {String}
-   * @default "3dh"
-   */
-  LEFT_RIGHT: "3dh",
-
-  /**
-   * A constant value specifying media is not in stereoscopic format.
-   * @ko Stereoscopic 영상이 아닐 경우에 적용하는 상수값.
-   * @name NONE
-   * @memberof eg.view360.PanoViewer.STEREO_FORMAT
-   * @constant
-   * @type {String}
-   * @default ""
-   */
-  NONE: ""
-};
 
 var latitudeBands = 60;
 var longitudeBands = 60;
@@ -4069,7 +4348,7 @@ function (_super) {
     } else {
       cylinderMaxRadian = aspectRatio;
       halfCylinderY = 0.5; // Range of cylinder is [-0.5, 0.5] to make height to 1.
-    } // intialize shader data before update
+    } // initialize shader data before update
 
 
     textureCoordData$1.length = 0;
@@ -4139,7 +4418,7 @@ function () {
       _this.removeEndCallback(_this.destroy);
 
       if (vrDisplay && vrDisplay.isPresenting) {
-        vrDisplay.exitPresent();
+        void vrDisplay.exitPresent();
       }
 
       _this._clear();
@@ -4212,11 +4491,11 @@ function () {
       var vrDisplay = displays.length && displays[0];
 
       if (!vrDisplay) {
-        return Promise.reject(new Error("No displays available."));
+        return Promise$1.reject(new Error("No displays available."));
       }
 
       if (!vrDisplay.capabilities.canPresent) {
-        return Promise.reject(new Error("Display lacking capability to present."));
+        return Promise$1.reject(new Error("Display lacking capability to present."));
       }
 
       return vrDisplay.requestPresent([{
@@ -4259,100 +4538,6 @@ function () {
   return VRManager;
 }();
 
-function merge(target) {
-  var srcs = [];
-
-  for (var _i = 1; _i < arguments.length; _i++) {
-    srcs[_i - 1] = arguments[_i];
-  }
-
-  srcs.forEach(function (source) {
-    Object.keys(source).forEach(function (key) {
-      var value = source[key];
-
-      if (Array.isArray(target[key]) && Array.isArray(value)) {
-        target[key] = __spread(target[key], value);
-      } else {
-        target[key] = value;
-      }
-    });
-  });
-  return target;
-}
-function toImageElement(image) {
-  var images = image instanceof Array ? image : [image];
-  var parsedImages = images.map(function (img) {
-    var _img = img;
-
-    if (typeof img === "string") {
-      _img = new Image();
-      _img.crossOrigin = "anonymous";
-      _img.src = img;
-    }
-
-    return _img;
-  });
-  return parsedImages.length === 1 ? parsedImages[0] : parsedImages;
-}
-function toVideoElement(videoCandidate) {
-  if (videoCandidate instanceof HTMLVideoElement) {
-    return videoCandidate;
-  } else {
-    // url
-    var video_1 = document.createElement("video");
-    video_1.setAttribute("crossorigin", "anonymous");
-    video_1.setAttribute("webkit-playsinline", "");
-    video_1.setAttribute("playsinline", "");
-
-    if (videoCandidate instanceof Array) {
-      videoCandidate.forEach(function (v) {
-        return appendSourceElement(video_1, v);
-      });
-    } else {
-      appendSourceElement(video_1, videoCandidate);
-    }
-
-    var sourceCount = video_1.querySelectorAll("source").length;
-
-    if (sourceCount > 0) {
-      if (video_1.readyState < 1) {
-        video_1.load();
-      }
-    }
-
-    return video_1;
-  }
-}
-/**
- *
- * @param {Object | String} videoUrl Object or String containing Video Source URL<ko>비디오 URL 정보를 담고 있는 문자열이나 객체 {type, src}</ko>
- */
-
-function appendSourceElement(video, videoUrl) {
-  var videoSrc;
-  var videoType;
-
-  if (typeof videoUrl === "object") {
-    videoSrc = videoUrl.src;
-    videoType = videoUrl.type;
-  } else if (typeof videoUrl === "string") {
-    videoSrc = videoUrl;
-  }
-
-  if (!videoSrc) {
-    return false;
-  }
-
-  var sourceElement = document.createElement("source");
-  sourceElement.src = videoSrc;
-
-  if (videoType) {
-    sourceElement.type = videoType;
-  }
-
-  video.appendChild(sourceElement);
-}
-
 var XR_REFERENCE_SPACE = "local";
 
 var XRManager =
@@ -4372,8 +4557,11 @@ function () {
 
       if (xrSession) {
         // Capture to avoid errors
-        // tslint:disable-next-line no-empty
-        xrSession.end().then(function () {}, function () {});
+        xrSession.end().then(function () {
+          return void 0;
+        }, function () {
+          return void 0;
+        });
       }
 
       _this._clear();
@@ -4402,7 +4590,7 @@ function () {
     var session = frame.session;
     var baseLayer = session.renderState.baseLayer;
     gl.bindFramebuffer(gl.FRAMEBUFFER, baseLayer.framebuffer);
-  }; // tslint:disable-next-line no-empty
+  }; // eslint-disable-next-line @typescript-eslint/no-empty-function
 
 
   __proto.afterRender = function () {};
@@ -4453,24 +4641,43 @@ function () {
   };
 
   __proto.requestPresent = function (canvas, gl) {
-    var _this = this;
+    return __awaiter(this, void 0, void 0, function () {
+      var options, attributes;
 
-    var options = merge({
-      requiredFeatures: [XR_REFERENCE_SPACE]
-    }, this._options);
-    var attributes = gl.getContextAttributes();
+      var _this = this;
 
-    if (attributes && attributes.xrCompatible !== true) {
-      gl.makeXRCompatible();
-    }
+      return __generator(this, function (_a) {
+        switch (_a.label) {
+          case 0:
+            options = merge({
+              requiredFeatures: [XR_REFERENCE_SPACE]
+            }, this._options);
+            attributes = gl.getContextAttributes();
+            if (!(attributes && attributes.xrCompatible !== true)) return [3
+            /*break*/
+            , 2];
+            return [4
+            /*yield*/
+            , gl.makeXRCompatible()];
 
-    return navigator.xr.requestSession("immersive-vr", options).then(function (session) {
-      var xrLayer = new window.XRWebGLLayer(session, gl);
-      session.updateRenderState({
-        baseLayer: xrLayer
-      });
-      return session.requestReferenceSpace(XR_REFERENCE_SPACE).then(function (refSpace) {
-        _this._setSession(session, xrLayer, refSpace);
+          case 1:
+            _a.sent();
+
+            _a.label = 2;
+
+          case 2:
+            return [2
+            /*return*/
+            , navigator.xr.requestSession("immersive-vr", options).then(function (session) {
+              var xrLayer = new window.XRWebGLLayer(session, gl);
+              session.updateRenderState({
+                baseLayer: xrLayer
+              });
+              return session.requestReferenceSpace(XR_REFERENCE_SPACE).then(function (refSpace) {
+                _this._setSession(session, xrLayer, refSpace);
+              });
+            })];
+        }
       });
     });
   };
@@ -4606,7 +4813,8 @@ function () {
   return WebGLAnimator;
 }();
 
-var ImageType = PROJECTION_TYPE;
+var ImageType = PROJECTION_TYPE; // eslint-disable-next-line @typescript-eslint/naming-convention
+
 var DEVICE_PIXEL_RATIO = devicePixelRatio || 1; // DEVICE_PIXEL_RATIO 가 2를 초과하는 경우는 리소스 낭비이므로 2로 맞춘다.
 
 if (DEVICE_PIXEL_RATIO > 2) {
@@ -4620,7 +4828,7 @@ if (DEVICE_PIXEL_RATIO > 2) {
  */
 
 
-var EVENTS$2 = {
+var EVENTS$1 = {
   BIND_TEXTURE: "bindTexture",
   IMAGE_LOADED: "imageLoaded",
   ERROR: "error",
@@ -4639,7 +4847,7 @@ var PanoImageRenderer =
 function (_super) {
   __extends(PanoImageRenderer, _super);
 
-  function PanoImageRenderer(image, width, height, isVideo, sphericalConfig, renderingContextAttributes) {
+  function PanoImageRenderer(image, width, height, isVideo, container, canvasClass, sphericalConfig, renderingContextAttributes) {
     var _this = // Super constructor
     _super.call(this) || this;
 
@@ -4755,7 +4963,7 @@ function (_super) {
     _this.textureCoordBuffer = null;
     _this.vertexBuffer = null;
     _this.indexBuffer = null;
-    _this.canvas = _this._initCanvas(width, height);
+    _this.canvas = _this._initCanvas(container, canvasClass, width, height);
 
     _this._setDefaultCanvasStyle();
 
@@ -4812,7 +5020,8 @@ function (_super) {
       tileConfig: {
         flipHorizontal: false,
         rotation: 0
-      }
+      },
+      trim: 0
     }, cubemapConfig);
 
     this._setImageType(imageType);
@@ -4847,7 +5056,7 @@ function (_super) {
   __proto.bindTexture = function () {
     var _this = this;
 
-    return new Promise(function (res, rej) {
+    return new Promise$1(function (res, rej) {
       var contentLoader = _this._contentLoader;
 
       if (!_this._image) {
@@ -4879,8 +5088,11 @@ function (_super) {
 
 
   __proto.attachTo = function (parentElement) {
-    this.detach();
-    parentElement.appendChild(this.canvas);
+    if (!this._hasExternalCanvas) {
+      this.detach();
+      parentElement.appendChild(this.canvas);
+    }
+
     this._wrapper = parentElement;
   };
 
@@ -4896,7 +5108,7 @@ function (_super) {
 
 
   __proto.detach = function () {
-    if (this.canvas.parentElement) {
+    if (!this._hasExternalCanvas && this.canvas.parentElement) {
       this.canvas.parentElement.removeChild(this.canvas);
     }
   };
@@ -5045,11 +5257,11 @@ function (_super) {
     var vr = this._vr;
 
     if (!WEBXR_SUPPORTED && !navigator.getVRDisplays) {
-      return Promise.reject("VR is not available on this browser.");
+      return Promise$1.reject("VR is not available on this browser.");
     }
 
     if (vr && vr.isPresenting()) {
-      return Promise.resolve("VR already enabled.");
+      return Promise$1.resolve("VR already enabled.");
     }
 
     return this._requestPresent(options);
@@ -5092,23 +5304,33 @@ function (_super) {
     }
 
     this._renderer.on(Renderer.EVENTS.ERROR, function (e) {
-      _this.trigger(EVENTS$2.ERROR, {
+      _this.trigger(new ComponentEvent(EVENTS$1.ERROR, {
         type: ERROR_TYPE$1.RENDERER_ERROR,
         message: e.message
-      });
+      }));
     });
 
     this._initWebGL();
   };
 
-  __proto._initCanvas = function (width, height) {
-    var canvas = document.createElement("canvas");
+  __proto._initCanvas = function (container, canvasClass, width, height) {
+    var canvasInContainer = container.querySelector("." + canvasClass);
+
+    var canvas = canvasInContainer || this._createCanvas(canvasClass);
+
+    this._hasExternalCanvas = !!canvasInContainer;
     canvas.width = width;
     canvas.height = height;
     this._onWebglcontextlost = this._onWebglcontextlost.bind(this);
     this._onWebglcontextrestored = this._onWebglcontextrestored.bind(this);
     canvas.addEventListener("webglcontextlost", this._onWebglcontextlost);
     canvas.addEventListener("webglcontextrestored", this._onWebglcontextrestored);
+    return canvas;
+  };
+
+  __proto._createCanvas = function (className) {
+    var canvas = document.createElement("canvas");
+    canvas.className = className;
     return canvas;
   };
 
@@ -5125,22 +5347,22 @@ function (_super) {
     canvas.style.position = "absolute";
   };
 
-  __proto._onContentError = function (error) {
+  __proto._onContentError = function () {
     this._imageIsReady = false;
     this._image = null;
-    this.trigger(EVENTS$2.ERROR, {
+    this.trigger(new ComponentEvent(EVENTS$1.ERROR, {
       type: ERROR_TYPE$1.FAIL_IMAGE_LOAD,
       message: "failed to load image"
-    });
+    }));
     return false;
   };
 
   __proto._triggerContentLoad = function () {
-    this.trigger(EVENTS$2.IMAGE_LOADED, {
+    this.trigger(new ComponentEvent(EVENTS$1.IMAGE_LOADED, {
       content: this._image,
       isVideo: this._isVideo,
       projectionType: this._imageType
-    });
+    }));
   };
 
   __proto._onContentLoad = function (e) {
@@ -5166,7 +5388,7 @@ function (_super) {
     var shaderProgram = WebGLUtils.createProgram(gl, vertexShader, fragmentShader);
 
     if (!shaderProgram) {
-      throw new Error("Failed to intialize shaders: " + WebGLUtils.getErrorNameFromWebGLErrorCode(gl.getError()));
+      throw new Error("Failed to initialize shaders: " + WebGLUtils.getErrorNameFromWebGLErrorCode(gl.getError()));
     }
 
     gl.useProgram(shaderProgram);
@@ -5187,13 +5409,13 @@ function (_super) {
 
   __proto._onWebglcontextlost = function (e) {
     e.preventDefault();
-    this.trigger(EVENTS$2.RENDERING_CONTEXT_LOST);
+    this.trigger(new ComponentEvent(EVENTS$1.RENDERING_CONTEXT_LOST));
   };
 
-  __proto._onWebglcontextrestored = function (e) {
+  __proto._onWebglcontextrestored = function () {
     this._initWebGL();
 
-    this.trigger(EVENTS$2.RENDERING_CONTEXT_RESTORE);
+    this.trigger(new ComponentEvent(EVENTS$1.RENDERING_CONTEXT_RESTORE));
   };
 
   __proto._updateViewport = function () {
@@ -5212,10 +5434,10 @@ function (_super) {
 
       this._initShaderProgram();
     } catch (e) {
-      this.trigger(EVENTS$2.ERROR, {
+      this.trigger(new ComponentEvent(EVENTS$1.ERROR, {
         type: ERROR_TYPE$1.NO_WEBGL,
         message: "no webgl support"
-      });
+      }));
       this.destroy();
       console.error(e); // eslint-disable-line no-console
 
@@ -5255,11 +5477,16 @@ function (_super) {
   };
 
   __proto._initBuffers = function () {
+    var image = this._image;
+
     var vertexPositionData = this._renderer.getVertexPositionData();
 
     var indexData = this._renderer.getIndexData();
 
-    var textureCoordData = this._renderer.getTextureCoordData(this._imageConfig);
+    var textureCoordData = this._renderer.getTextureCoordData({
+      image: image,
+      imageConfig: this._imageConfig
+    });
 
     var gl = this.context;
     this.vertexBuffer = WebGLUtils.initBuffer(gl, gl.ARRAY_BUFFER, new Float32Array(vertexPositionData), 3, this.shaderProgram.vertexPositionAttribute);
@@ -5289,7 +5516,7 @@ function (_super) {
       this._renderer.updateShaderData({
         imageAspectRatio: imageAspectRatio
       });
-    } // intialize shader buffers after image is loaded.(by updateShaderData)
+    } // initialize shader buffers after image is loaded.(by updateShaderData)
     // because buffer may be differ by image size.(eg. CylinderRenderer)
 
 
@@ -5298,7 +5525,7 @@ function (_super) {
     this._renderer.bindTexture(this.context, this.texture, this._image, this._imageConfig);
 
     this._shouldForceDraw = true;
-    this.trigger(EVENTS$2.BIND_TEXTURE);
+    this.trigger(new ComponentEvent(EVENTS$1.BIND_TEXTURE));
   };
 
   __proto._updateTexture = function () {
@@ -5355,7 +5582,7 @@ function (_super) {
     this._vr = WEBXR_SUPPORTED ? new XRManager(options) : new VRManager();
     var vr = this._vr;
     animator.stop();
-    return new Promise(function (resolve, reject) {
+    return new Promise$1(function (resolve, reject) {
       vr.requestPresent(canvas, gl).then(function () {
         vr.addEndCallback(_this.exitVR);
         animator.setContext(vr.context);
@@ -5408,7 +5635,7 @@ function (_super) {
     this._setDefaultCanvasStyle();
   };
 
-  PanoImageRenderer.EVENTS = EVENTS$2;
+  PanoImageRenderer.EVENTS = EVENTS$1;
   PanoImageRenderer.ERROR_TYPE = ERROR_TYPE$1;
   return PanoImageRenderer;
 }(Component);
@@ -5436,10 +5663,10 @@ function (_super) {
    * @param {Object} options.cubemapConfig Config cubemap projection layout. It is applied when projectionType is {@link eg.view360.PanoViewer.PROJECTION_TYPE.CUBEMAP} or {@link eg.view360.PanoViewer.PROJECTION_TYPE.CUBESTRIP}<ko>cubemap projection type 의 레이아웃을 설정한다. 이 설정은 ProjectionType이 {@link eg.view360.PanoViewer.PROJECTION_TYPE.CUBEMAP} 혹은 {@link eg.view360.PanoViewer.PROJECTION_TYPE.CUBESTRIP} 인 경우에만 적용된다.</ko>
    * @param {Object} [options.cubemapConfig.order = "RLUDBF"(ProjectionType === CUBEMAP) | "RLUDFB" (ProjectionType === CUBESTRIP)] Order of cubemap faces <ko>Cubemap 형태의 이미지가 배치된 순서</ko>
    * @param {Object} [options.cubemapConfig.tileConfig = { flipHorizontal:false, rotation: 0 }] Setting about rotation angle(degree) and whether to flip horizontal for each cubemap faces, if you put this object as a array, you can set each faces with different setting. For example, [{flipHorizontal:false, rotation:90}, {flipHorizontal: true, rotation: 180}, ...]<ko>각 Cubemap 면에 대한 회전 각도/좌우반전 여부 설정, 객체를 배열 형태로 지정하여 각 면에 대한 설정을 다르게 지정할 수도 있다. 예를 들어 [{flipHorizontal:false, rotation:90}, {flipHorizontal: true, rotation: 180}, ...]과 같이 지정할 수 있다.</ko>
+   * @param {Number} [options.cubemapConfig.trim=0] A px distance to discard from each tile side. You can use this value to avoid graphical glitch at where tiles are connected. This option is available when there's only one texture.<ko>각 타일의 끝으로부터 폐기할 px 거리. 이 옵션을 사용하여 타일의 접합부에서 나타나는 그래픽 결함을 완화할 수 있습니다. 이 옵션은 한 개의 텍스쳐만 사용할 때 적용 가능합니다.</ko>
    * @param {String} [options.stereoFormat="3dv"] Contents format of the stereoscopic equirectangular projection.<br/>See {@link eg.view360.PanoViewer.STEREO_FORMAT}.<ko>Stereoscopic equirectangular projection type의 콘텐츠 포맷을 설정한다.<br/>{@link eg.view360.PanoViewer.STEREO_FORMAT} 참조.</ko>
    * @param {Number} [options.width=width of container] the viewer's width. (in px) <ko>뷰어의 너비 (px 단위)</ko>
    * @param {Number} [options.height=height of container] the viewer's height.(in px) <ko>뷰어의 높이 (px 단위)</ko>
-   *
    * @param {Number} [options.yaw=0] Initial Yaw of camera (in degree) <ko>카메라의 초기 Yaw (degree 단위)</ko>
    * @param {Number} [options.pitch=0] Initial Pitch of camera (in degree) <ko>카메라의 초기 Pitch (degree 단위)</ko>
    * @param {Number} [options.fov=65] Initial vertical field of view of camera (in degree) <ko>카메라의 초기 수직 field of view (degree 단위)</ko>
@@ -5451,6 +5678,7 @@ function (_super) {
    * @param {Array} [options.pitchRange=[-90, 90]] Range of controllable Pitch values <ko>제어 가능한 Pitch 값의 범위</ko>
    * @param {Array} [options.fovRange=[30, 110]] Range of controllable vertical field of view values <ko>제어 가능한 수직 field of view 값의 범위</ko>
    * @param {Number} [options.touchDirection= {@link eg.view360.PanoViewer.TOUCH_DIRECTION.ALL}(6)] Direction of touch that can be controlled by user <br/>{@link eg.view360.PanoViewer.TOUCH_DIRECTION}<ko>사용자가 터치로 조작 가능한 방향 <br/>{@link eg.view360.PanoViewer.TOUCH_DIRECTION}</ko>
+   * @param {String} [options.canvasClass="view360-canvas"] A class name for the canvas element inside the container element. PanoViewer will use the canvas that has this class instead of creating one if it exists<ko>콘테이너 엘리먼트 내부의 캔버스 엘리먼트의 클래스 이름. PanoViewer는 해당 클래스를 갖는 캔버스 엘리먼트가 콘테이너 엘리먼트 내부에 존재할 경우, 새로 생성하는 대신 그 엘리먼트를 사용할 것입니다</ko>
    *
    * @example
    * ```
@@ -5489,30 +5717,30 @@ function (_super) {
 
     if (!WebGLUtils.isWebGLAvailable()) {
       setTimeout(function () {
-        _this.trigger(EVENTS$1.ERROR, {
+        _this.trigger(new ComponentEvent(PANOVIEWER_EVENTS.ERROR, {
           type: ERROR_TYPE.NO_WEBGL,
           message: "no webgl support"
-        });
+        }));
       }, 0);
       return _this;
     }
 
     if (!WebGLUtils.isStableWebGL()) {
       setTimeout(function () {
-        _this.trigger(EVENTS$1.ERROR, {
+        _this.trigger(new ComponentEvent(PANOVIEWER_EVENTS.ERROR, {
           type: ERROR_TYPE.INVALID_DEVICE,
           message: "blacklisted browser"
-        });
+        }));
       }, 0);
       return _this;
     }
 
     if (!!options.image && !!options.video) {
       setTimeout(function () {
-        _this.trigger(EVENTS$1.ERROR, {
+        _this.trigger(new ComponentEvent(PANOVIEWER_EVENTS.ERROR, {
           type: ERROR_TYPE.INVALID_RESOURCE,
           message: "Specifying multi resouces(both image and video) is not valid."
-        });
+        }));
       }, 0);
       return _this;
     } // Check XR support at not when imported, but when created.
@@ -5530,7 +5758,8 @@ function (_super) {
       tileConfig: {
         flipHorizontal: false,
         rotation: 0
-      }
+      },
+      trim: 0
     }, options.cubemapConfig);
     _this._stereoFormat = options.stereoFormat || STEREO_FORMAT.TOP_BOTTOM; // If the width and height are not provided, will use the size of the container.
 
@@ -5548,6 +5777,7 @@ function (_super) {
     _this._gyroMode = options.gyroMode || GYRO_MODE.YAWPITCH;
     _this._quaternion = null;
     _this._aspectRatio = _this._height !== 0 ? _this._width / _this._height : 1;
+    _this._canvasClass = options.canvasClass || DEFAULT_CANVAS_CLASS;
     var fovRange = options.fovRange || [30, 110];
     var touchDirection = PanoViewer._isValidTouchDirection(options.touchDirection) ? options.touchDirection : YawPitchControl.TOUCH_DIRECTION_ALL;
 
@@ -5607,8 +5837,8 @@ function (_super) {
 
     var onDeviceMotionChange;
 
-    function checkGyro() {
-      return new Promise(function (res, rej) {
+    var checkGyro = function () {
+      return new Promise$1(function (res) {
         onDeviceMotionChange = function (deviceMotion) {
           var isGyroSensorAvailable = !(deviceMotion.rotationRate.alpha == null);
           res(isGyroSensorAvailable);
@@ -5616,17 +5846,17 @@ function (_super) {
 
         window.addEventListener("devicemotion", onDeviceMotionChange);
       });
-    }
+    };
 
-    function timeout() {
-      return new Promise(function (res, rej) {
+    var timeout = function () {
+      return new Promise$1(function (res) {
         setTimeout(function () {
           return res(false);
         }, 1000);
       });
-    }
+    };
 
-    Promise.race([checkGyro(), timeout()]).then(function (isGyroSensorAvailable) {
+    Promise$1.race([checkGyro(), timeout()]).then(function (isGyroSensorAvailable) {
       window.removeEventListener("devicemotion", onDeviceMotionChange);
 
       if (callback) {
@@ -5746,7 +5976,8 @@ function (_super) {
       tileConfig: {
         flipHorizontal: false,
         rotation: 0
-      }
+      },
+      trim: 0
     }, param.cubemapConfig);
 
     var stereoFormat = param.stereoFormat || STEREO_FORMAT.TOP_BOTTOM;
@@ -5761,13 +5992,13 @@ function (_super) {
     }
 
     if (image) {
+      this._deactivate();
+
       this._image = image;
       this._isVideo = isVideo;
       this._projectionType = param.projectionType || PROJECTION_TYPE.EQUIRECTANGULAR;
       this._cubemapConfig = cubemapConfig;
       this._stereoFormat = stereoFormat;
-
-      this._deactivate();
 
       this._initRenderer(this._yaw, this._pitch, this._fov, this._projectionType, this._cubemapConfig);
     }
@@ -5807,7 +6038,7 @@ function (_super) {
 
 
   __proto.enableSensor = function () {
-    return new Promise(function (resolve, reject) {
+    return new Promise$1(function (resolve, reject) {
       if (DeviceMotionEvent && typeof DeviceMotionEvent.requestPermission === "function") {
         DeviceMotionEvent.requestPermission().then(function (permissionState) {
           if (permissionState === "granted") {
@@ -5855,10 +6086,10 @@ function (_super) {
     }
 
     if (!this._isReady) {
-      return Promise.reject(new Error("PanoViewer is not ready to show image."));
+      return Promise$1.reject(new Error("PanoViewer is not ready to show image."));
     }
 
-    return new Promise(function (resolve, reject) {
+    return new Promise$1(function (resolve, reject) {
       _this.enableSensor().then(function () {
         return _this._photoSphereRenderer.enterVR(options);
       }).then(function (res) {
@@ -6199,7 +6430,7 @@ function (_super) {
   __proto._initRenderer = function (yaw, pitch, fov, projectionType, cubemapConfig) {
     var _this = this;
 
-    this._photoSphereRenderer = new PanoImageRenderer(this._image, this._width, this._height, this._isVideo, {
+    this._photoSphereRenderer = new PanoImageRenderer(this._image, this._width, this._height, this._isVideo, this._container, this._canvasClass, {
       initialYaw: yaw,
       initialPitch: pitch,
       fieldOfView: fov,
@@ -6215,10 +6446,10 @@ function (_super) {
     this._photoSphereRenderer.bindTexture().then(function () {
       return _this._activate();
     }).catch(function () {
-      _this.trigger(EVENTS$1.ERROR, {
+      _this.trigger(new ComponentEvent(PANOVIEWER_EVENTS.ERROR, {
         type: ERROR_TYPE.FAIL_BIND_TEXTURE,
         message: "failed to bind texture"
-      });
+      }));
     });
   };
   /**
@@ -6274,16 +6505,16 @@ function (_super) {
     var _this = this;
 
     this._photoSphereRenderer.on(PanoImageRenderer.EVENTS.ERROR, function (e) {
-      _this.trigger(EVENTS$1.ERROR, e);
+      _this.trigger(new ComponentEvent(PANOVIEWER_EVENTS.ERROR, e));
     });
 
-    this._photoSphereRenderer.on(PanoImageRenderer.EVENTS.RENDERING_CONTEXT_LOST, function (e) {
+    this._photoSphereRenderer.on(PanoImageRenderer.EVENTS.RENDERING_CONTEXT_LOST, function () {
       _this._deactivate();
 
-      _this.trigger(EVENTS$1.ERROR, {
+      _this.trigger(new ComponentEvent(PANOVIEWER_EVENTS.ERROR, {
         type: ERROR_TYPE.RENDERING_CONTEXT_LOST,
         message: "webgl rendering context lost"
-      });
+      }));
     });
   };
 
@@ -6292,8 +6523,8 @@ function (_super) {
 
     this._yawPitchControl = new YawPitchControl(yawPitchConfig);
 
-    this._yawPitchControl.on(EVENTS$1.ANIMATION_END, function (e) {
-      _this.trigger(EVENTS$1.ANIMATION_END, e);
+    this._yawPitchControl.on(PANOVIEWER_EVENTS.ANIMATION_END, function (e) {
+      _this.trigger(new ComponentEvent(PANOVIEWER_EVENTS.ANIMATION_END, e));
     });
 
     this._yawPitchControl.on("change", function (e) {
@@ -6302,7 +6533,13 @@ function (_super) {
       _this._fov = e.fov;
       _this._quaternion = e.quaternion;
 
-      _this.trigger(EVENTS$1.VIEW_CHANGE, e);
+      _this.trigger(new ComponentEvent(PANOVIEWER_EVENTS.VIEW_CHANGE, {
+        yaw: e.yaw,
+        pitch: e.pitch,
+        fov: e.fov,
+        quaternion: e.quaternion,
+        isTrusted: e.isTrusted
+      }));
     });
   };
 
@@ -6316,7 +6553,7 @@ function (_super) {
 
     this._updateYawPitchIfNeeded();
 
-    this.trigger(EVENTS$1.READY);
+    this.trigger(new ComponentEvent(PANOVIEWER_EVENTS.READY));
 
     this._photoSphereRenderer.startRender();
   };
@@ -6326,6 +6563,13 @@ function (_super) {
 
 
   __proto._deactivate = function () {
+    // Turn off the video if it has one
+    var video = this.getVideo();
+
+    if (video) {
+      video.pause();
+    }
+
     if (this._isReady) {
       this._photoSphereRenderer.stopRender();
 
@@ -6354,9 +6598,10 @@ function (_super) {
 
   PanoViewer.VERSION = VERSION;
   PanoViewer.ERROR_TYPE = ERROR_TYPE;
-  PanoViewer.EVENTS = EVENTS$1;
+  PanoViewer.EVENTS = PANOVIEWER_EVENTS;
   PanoViewer.PROJECTION_TYPE = PROJECTION_TYPE;
   PanoViewer.GYRO_MODE = GYRO_MODE; // This should be deprecated!
+  // eslint-disable-next-line @typescript-eslint/naming-convention
 
   PanoViewer.ProjectionType = PROJECTION_TYPE;
   PanoViewer.STEREO_FORMAT = STEREO_FORMAT;
@@ -6414,6 +6659,29 @@ function (_super) {
   };
   return PanoViewer;
 }(Component);
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+var SPINVIEWER_OPTIONS = {
+  imageUrl: true,
+  rowCount: true,
+  colCount: true,
+  width: true,
+  height: true,
+  autoHeight: true,
+  colRow: true,
+  scale: true,
+  frameIndex: true,
+  wrapperClass: true,
+  imageClass: true
+};
+var SPINVIEWER_EVENTS = {
+  LOAD: "load",
+  IMAGE_ERROR: "imageError",
+  CHANGE: "change",
+  ANIMATION_END: "animationEnd"
+};
+var DEFAULT_WRAPPER_CLASS = "view360-wrapper";
+var DEFAULT_IMAGE_CLASS = "view360-image";
 
 /**
  * @memberof eg.view360
@@ -6483,32 +6751,48 @@ function (_super) {
 
     _this._el.style.width = SpriteImage._getSizeString(_this._width);
     _this._el.style.height = SpriteImage._getSizeString(_this._height);
+    var wrapperClass = opt.wrapperClass || DEFAULT_WRAPPER_CLASS;
+    var imageClass = opt.imageClass || DEFAULT_IMAGE_CLASS;
 
     if (!opt.imageUrl) {
       setTimeout(function () {
-        _this.trigger("imageError", {
+        _this.trigger(new ComponentEvent("imageError", {
           imageUrl: opt.imageUrl
-        });
+        }));
       }, 0);
       return _this;
     }
 
-    _this._image = new Image();
+    var imageInContainer = element.querySelector("." + imageClass);
+    var wrapperInContainer = element.querySelector("." + wrapperClass);
+
+    if (wrapperInContainer && imageInContainer) {
+      // Set it to invisible to prevent wrapper being resized
+      imageInContainer.style.display = "none";
+    }
+
+    _this._image = imageInContainer || new Image();
     /**
      * Event
      */
 
-    _this._image.onload = function () {
-      _this._bg = SpriteImage._createBgDiv(_this._image, _this._rowCount, _this._colCount, _this._autoHeight);
+    var image = _this._image;
+
+    image.onload = function () {
+      if (wrapperInContainer && imageInContainer) {
+        imageInContainer.style.display = "";
+      }
+
+      _this._bg = SpriteImage._createBgDiv(wrapperInContainer, image, _this._rowCount, _this._colCount, _this._autoHeight);
 
       _this._el.appendChild(_this._bg);
 
       _this.setColRow(_this._colRow[0], _this._colRow[1]);
 
-      _this.trigger("load", {
+      _this.trigger(new ComponentEvent("load", {
         target: _this._el,
         bgElement: _this._bg
-      });
+      }));
 
       if (_this._autoPlayReservedInfo) {
         _this.play(_this._autoPlayReservedInfo);
@@ -6517,20 +6801,20 @@ function (_super) {
       }
     };
 
-    _this._image.onerror = function (e) {
-      _this.trigger("imageError", {
+    image.onerror = function () {
+      _this.trigger(new ComponentEvent("imageError", {
         imageUrl: opt.imageUrl
-      });
+      }));
     };
 
-    _this._image.src = opt.imageUrl;
+    image.src = opt.imageUrl;
     return _this;
   }
 
   var __proto = SpriteImage.prototype;
 
-  SpriteImage._createBgDiv = function (img, rowCount, colCount, autoHeight) {
-    var el = document.createElement("div");
+  SpriteImage._createBgDiv = function (wrapperInContainer, img, rowCount, colCount, autoHeight) {
+    var el = wrapperInContainer || document.createElement("div");
     el.style.position = "relative";
     el.style.overflow = "hidden";
     img.style.position = "absolute";
@@ -6549,8 +6833,8 @@ function (_super) {
     }
 
     el.appendChild(img);
-    var unitWidth = img.width / colCount;
-    var unitHeight = img.height / rowCount;
+    var unitWidth = img.naturalWidth / colCount;
+    var unitHeight = img.naturalHeight / rowCount;
 
     if (autoHeight) {
       var r = unitHeight / unitWidth;
@@ -6768,6 +7052,9 @@ function (_super) {
    * @param {Boolean} [options.autoHeight=true] Whether to automatically set the height of the image area to match the original image's proportion <ko>원본 이미지 비율에 맞게 이미지 영역의 높이를 자동으로 설정할지 여부</ko>
    * @param {Number[]} [options.colRow=[0, 0]] The column, row coordinates of the first frame of the sprite image (based on 0 index) <ko> 스프라이트 이미지 중 처음 보여줄 프레임의 (column, row) 좌표 (0 index 기반)</ko>
    * @param {Number} [options.scale=1] Spin scale (The larger the spin, the more).<ko>Spin 배율 (클 수록 더 많이 움직임)</ko>
+   * @param {Number} [options.frameIndex] The frameIndex of the frame to be shown in the sprite image<ko>스프라이트 이미지 중 보여질 프레임의 frameIndex 값</ko>
+   * @param {String} [options.wrapperClass="view360-wrapper"] A class name for the parent element of the image element inside the container element. SpinViewer will use the element that has this class instead of creating one if it exists<ko>이미지 엘리먼트의 부모 엘리먼트의 클래스 이름. SpinViewer는 해당 클래스를 갖는 엘리먼트가 콘테이너 엘리먼트 내부에 존재할 경우, 새로 생성하는 대신 그 엘리먼트를 사용할 것입니다</ko>
+   * @param {String} [options.imageClass="view360-image"] A class name for the image element inside the container element. SpinViewer will use the image element that has this class instead of creating one if it exists<ko>콘테이너 엘리먼트 내부의 이미지 엘리먼트의 클래스 이름. SpinViewer는 해당 클래스를 갖는 이미지 엘리먼트가 콘테이너 엘리먼트 내부에 존재할 경우, 새로 생성하는 대신 그 엘리먼트를 사용할 것입니다</ko>
    * @support {"ie": "9+", "ch" : "latest", "ff" : "latest",  "sf" : "latest", "edge" : "latest", "ios" : "7+", "an" : "2.3+ (except 3.x)"}
    * @example
    * ```
@@ -6800,12 +7087,12 @@ function (_super) {
 
     _this._sprites = new SpriteImage(element, opt).on({
       "load": function (evt) {
-        _this.trigger("load", evt);
+        _this.trigger(new ComponentEvent("load", evt));
       },
       "imageError": function (evt) {
-        _this.trigger("imageError", {
+        _this.trigger(new ComponentEvent("imageError", {
           imageUrl: evt.imageUrl
-        });
+        }));
       }
     }); // Init Axes
 
@@ -6824,16 +7111,16 @@ function (_super) {
 
         _this._sprites.setFrameIndex(frameIndex);
 
-        _this.trigger("change", {
+        _this.trigger(new ComponentEvent("change", {
           frameIndex: frameIndex,
           colRow: _this._sprites.getColRow(),
           angle: evt.pos.angle
-        });
+        }));
       },
       "animationEnd": function (evt) {
-        _this.trigger("animationEnd", {
+        _this.trigger(new ComponentEvent("animationEnd", {
           isTrusted: evt.isTrusted
-        });
+        }));
       }
     });
 
@@ -6966,4 +7253,118 @@ function (_super) {
   return SpinViewer;
 }(Component);
 
-export { PanoViewer, SpinViewer, SpriteImage, VERSION };
+var withMethods = function (component, prototype, vanillaInstance) {
+  [Component.prototype, component.prototype].forEach(function (proto) {
+    Object.getOwnPropertyNames(proto).filter(function (name) {
+      return !prototype[name] && !name.startsWith("_") && name !== "constructor";
+    }).forEach(function (name) {
+      var descriptor = Object.getOwnPropertyDescriptor(proto, name);
+
+      if (descriptor.value) {
+        // Public Function
+        Object.defineProperty(prototype, name, {
+          value: function () {
+            var _a;
+
+            var args = [];
+
+            for (var _i = 0; _i < arguments.length; _i++) {
+              args[_i] = arguments[_i];
+            }
+
+            return (_a = descriptor.value).call.apply(_a, __spread([this[vanillaInstance]], args));
+          }
+        });
+      } else {
+        var getterDescriptor = {};
+
+        if (descriptor.get) {
+          getterDescriptor.get = function () {
+            var _a;
+
+            return (_a = descriptor.get) === null || _a === void 0 ? void 0 : _a.call(this[vanillaInstance]);
+          };
+        }
+
+        if (descriptor.set) {
+          getterDescriptor.set = function () {
+            var _a;
+
+            var args = [];
+
+            for (var _i = 0; _i < arguments.length; _i++) {
+              args[_i] = arguments[_i];
+            }
+
+            return (_a = descriptor.set) === null || _a === void 0 ? void 0 : _a.call.apply(_a, __spread([this[vanillaInstance]], args));
+          };
+        }
+
+        Object.defineProperty(prototype, name, getterDescriptor);
+      }
+    });
+  });
+};
+
+var withPanoViewerMethods = function (prototype, name) {
+  withMethods(PanoViewer, prototype, name);
+};
+
+var withSpinViewerMethods = function (prototype, name) {
+  withMethods(SpinViewer, prototype, name);
+};
+
+var updatePanoViewer = (function (panoViewer, newProps, prevProps) {
+  if (isPropChanged(newProps.image, prevProps.image)) {
+    panoViewer.setImage(newProps.image, {
+      projectionType: newProps.projectionType,
+      cubemapConfig: newProps.cubemapConfig,
+      stereoFormat: newProps.stereoFormat,
+      isVideo: false
+    });
+  } else if (isPropChanged(newProps.video, prevProps.video)) {
+    panoViewer.setVideo(newProps.video, {
+      projectionType: newProps.projectionType,
+      cubemapConfig: newProps.cubemapConfig,
+      stereoFormat: newProps.stereoFormat
+    });
+  }
+
+  var singleUpdateOptions = ["fovRange", "gyroMode", "pitchRange", "showPolePoint", "touchDirection", "useKeyboard", "useZoom", "yawRange"];
+  singleUpdateOptions.forEach(function (optionName) {
+    updateOption(panoViewer, optionName, newProps, prevProps);
+  });
+});
+
+var isPropChanged = function (val, prevVal) {
+  return val != null && val !== prevVal;
+};
+
+var updateOption = function (panoViewer, optionName, newProps, prevProps) {
+  if (isPropChanged(newProps[optionName], prevProps[optionName])) {
+    panoViewer["set" + optionName[0].toUpperCase() + optionName.slice(1)](newProps[optionName]);
+  }
+};
+
+var getValidProps = function (propsObj) {
+  return Object.keys(propsObj).reduce(function (props, propName) {
+    if (propsObj[propName] != null) {
+      props[propName] = propsObj[propName];
+    }
+
+    return props;
+  }, {});
+};
+var generateCanvasKey = function (oldKey) {
+  var newKey;
+
+  do {
+    var array = new Uint32Array(1);
+    crypto.getRandomValues(array);
+    newKey = array[0];
+  } while (newKey === oldKey);
+
+  return newKey;
+};
+
+export { DEFAULT_CANVAS_CLASS, DEFAULT_IMAGE_CLASS, DEFAULT_WRAPPER_CLASS, ERROR_TYPE, GYRO_MODE, PANOVIEWER_EVENTS, PANOVIEWER_OPTIONS, PROJECTION_TYPE, PanoViewer, SPINVIEWER_EVENTS, SPINVIEWER_OPTIONS, STEREO_FORMAT, SpinViewer, SpriteImage, VERSION, generateCanvasKey, getValidProps, updatePanoViewer, withMethods, withPanoViewerMethods, withSpinViewerMethods };

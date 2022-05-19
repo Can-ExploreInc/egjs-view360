@@ -6,20 +6,7 @@ on:
       - "*"
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Install deps
-        run: sudo apt-get install -y libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 16
-      - run: npm ci
-      - run: npm test
-
   publish-npm:
-    needs: build
     runs-on: ubuntu-latest
     steps:
       - name: Install deps

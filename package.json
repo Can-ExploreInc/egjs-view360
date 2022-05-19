@@ -1,5 +1,5 @@
 {
-  "name": "@egjs/view360-canex",
+  "name": "view360-canex",
   "version": "3.4.8",
   "description": "360 integrated viewing solution from inside-out view to outside-in view. It provides user-friendly service by rotating 360 degrees through various user interaction such as motion sensor and touch.",
   "main": "dist/view360.js",
